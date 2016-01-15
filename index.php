@@ -1,27 +1,40 @@
 <?php
 
-class Application
+class Index
 {
+    public $msg;
+    private $model, $username, $password;
+    
     public function __construct()
     {
-        $this->checkLoginStatus();
-    }
-    
-    private function checkLoginStatus()
-    {
-        session_start();
+        require_once 'model/model.php';
+        $this->model = new Model();
         
-        if ($_SESSION['auth']) {
+        if ((isset($_POST['username'])) && (isset($_POST['password']))) {
             
-            require_once 'controller/adminpanel.php';
-            new AdminPanel;
+            $this->username = htmlspecialchars($_POST['username']);
+            $this->password = htmlspecialchars($_POST['password']);
             
+            // If user exists:
+            if ($this->model->checkAuthorization($this->username, $this->password)) {
+                
+                // If admin:
+                if ($this->model->checkAdminStatus($this->username) == 1) {
+                    require_once 'controller/adminpanel.php';
+                    new AdminPanel();
+                } else {
+                    require_once 'controller/poll.php';
+                    new Poll();
+                }
+            } else {
+                require_once 'controller/login.php';
+                new Login();
+            }
         } else {
-            
             require_once 'controller/login.php';
-            new Login;
+            new Login();
         }
     }
 }
 
-new Application;
+new Index();

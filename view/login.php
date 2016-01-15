@@ -1,11 +1,9 @@
     <body>
-        <form action="">
-            <label for="login">
-                <input id="login" type="text" name="login">
-            </label>
-            <label for="password">
-                <input id="password" type="text" name="password">
-            </label>
+        <form action="index.php" method="post">
+            <label for="username">Username: </label>
+            <input id="username" type="text" name="username">
+            <label for="password">Password: </label>
+            <input id="password" type="text" name="password">
             <input type="submit" value="Login">
         </form>
     </body>
