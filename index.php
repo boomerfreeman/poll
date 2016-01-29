@@ -2,38 +2,97 @@
 
 class Index
 {
-    public $msg;
-    private $model, $username, $password;
+    /**
+     * @var null The controller
+     */
+    private $url_controller = null;
+    /**
+     * @var null The method (of the above controller)
+     */
+    private $url_method = null;
+    /**
+     * @var array URL parameters
+     */
+    private $url_params = array();
     
     public function __construct()
     {
-        require_once 'model/model.php';
-        $this->model = new Model();
+        require_once '/config/config.php';
         
-        if ((isset($_POST['username'])) && (isset($_POST['password']))) {
+        if (isset($_SERVER['REQUEST_URI'])) {
             
-            $this->username = htmlspecialchars($_POST['username']);
-            $this->password = htmlspecialchars($_POST['password']);
+            $this->splitUrl();
             
-            // If user exists:
-            if ($this->model->checkAuthorization($this->username, $this->password)) {
+            if ( ! $this->url_controller) {
                 
-                // If admin:
-                if ($this->model->checkAdminStatus($this->username) == 1) {
-                    require_once 'controller/adminpanel.php';
-                    new AdminPanel();
-                } else {
-                    require_once 'controller/poll.php';
-                    new Poll();
-                }
+                $this->url_controller = 'login';
+            
+            } elseif ($this->checkControllerExistence()) {
+                
+                $controller = $this->createController($this->url_controller);
+                
+                $this->checkMethodExistence() ? $controller->{$this->url_method}() : null;
             } else {
-                require_once 'controller/login.php';
-                new Login();
+                $this->url_controller = 'error';
             }
         } else {
-            require_once 'controller/login.php';
-            new Login();
+            $this->url_controller = 'login';
         }
+        $this->createController($this->url_controller);
+    }
+    
+    /**
+     * Split URL into the parts
+     */
+    private function splitUrl()
+    {
+        $url = trim($_SERVER['REQUEST_URI'], '/');
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+        $url = explode('/', $url);
+
+        $this->url_controller = isset($url[0]) ? $url[0] : null;
+        $this->url_method = isset($url[1]) ? $url[1] : null;
+
+        unset($url[0], $url[1]);
+
+        $this->url_params = array_values($url);
+    }
+    
+    /**
+     * Check if controller exist
+     * @return boolean
+     */
+    private function checkControllerExistence()
+    {
+        if (file_exists('controller/' . $this->url_controller . '.php')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Check if method exist
+     * @return boolean
+     */
+    private function checkMethodExistence()
+    {
+        if (method_exists($this->url_controller, $this->url_method)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Construct controller
+     * @param type $controller
+     * @return \controller
+     */
+    private function createController($controller)
+    {
+        require_once 'controller/' . $controller . '.php';
+        return new $controller;
     }
 }
 

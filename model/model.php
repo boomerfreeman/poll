@@ -4,7 +4,7 @@ class Model
 {
     public function __construct()
     {
-        require_once 'config/config.php';
+        require_once '/config/config.php';
         
         $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
         $this->db = new PDO(DB_TYPE . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET, DB_USER, DB_PASS, $options);
@@ -36,5 +36,38 @@ class Model
         $query->execute(array(':username' => $username));
         
         return $query->fetch()->group;
+    }
+    
+    public function showActivePolls()
+    {
+        $query = $this->db->query('SELECT `question` FROM `poll` WHERE `show` = 1 ORDER BY `id`');
+        
+        return $query->fetchAll();
+    }
+    
+    public function activatePoll($id)
+    {
+        $query = $this->db->prepare('UPDATE `poll` SET `show` = 1 WHERE `question_id` = :id');
+        $query->execute(array(':id' => $id));
+    }
+    
+    public function disablePoll($id)
+    {
+        $query = $this->db->prepare('UPDATE `poll` SET `show` = 0 WHERE `question_id` = :id');
+        $query->execute(array(':id' => $id));
+    }
+    
+    public function addNewPoll()
+    {
+        $query = $this->db->query('SELECT `question` FROM `poll` ORDER BY `id`');
+        
+        return $query->fetchAll();
+    }
+    
+    public function deletePoll()
+    {
+        $query = $this->db->query('SELECT `question` FROM `poll` ORDER BY `id`');
+        
+        return $query->fetchAll();
     }
 }

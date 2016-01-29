@@ -1,12 +1,24 @@
 <?php
 
-// Controller for admin panel:
-class AdminPanel
+require_once 'controller.php';
+
+// Controller for administration panel:
+class AdminPanel extends Controller
 {
     public function __construct()
     {
-        require_once 'view/header.php';
-        require_once 'view/adminpanel.php';
-        require_once 'view/footer.php';
+        parent::__construct();
+        
+        $poll['list'] = array_unique($this->model->showActivePolls(), SORT_REGULAR);
+        $poll['count'] = count($poll['list']);
+        
+        $this->generateView('adminpanel');
+    }
+    
+    public function test()
+    {
+        echo 'True';
     }
 }
+
+//new AdminPanel();

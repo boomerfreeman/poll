@@ -1,12 +1,14 @@
 <?php
 
+require_once 'controller.php';
+
 // Controller for login page:
-class Login
+class Login extends Controller
 {
     public function __construct()
     {
-        require_once 'view/header.php';
-        require_once 'view/login.php';
-        require_once 'view/footer.php';
+        parent::__construct();
+        
+        $this->generateView('login');
     }
 }
