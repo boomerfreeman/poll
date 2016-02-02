@@ -1,20 +1,9 @@
 <?php
 
-class Index
+require_once 'controller/controller.php';
+
+class Index extends Controller
 {
-    /**
-     * @var null The controller
-     */
-    private $url_controller = null;
-    /**
-     * @var null The method (of the above controller)
-     */
-    private $url_method = null;
-    /**
-     * @var array URL parameters
-     */
-    private $url_params = array();
-    
     public function __construct()
     {
         require_once '/config/config.php';
@@ -27,16 +16,15 @@ class Index
                 
                 $this->url_controller = 'login';
             
-            } elseif ($this->checkControllerExistence()) {
+            } elseif ($this->checkController()) {
                 
-                $controller = $this->createController($this->url_controller);
-                
-                $this->checkMethodExistence() ? $controller->{$this->url_method}() : null;
+                /**
+                 * Create controller and call method if they have been set in URL
+                 */
+                $this->checkMethod() ? $this->createController($this->url_controller)->{$this->url_method}() : null;
             } else {
                 $this->url_controller = 'error';
             }
-        } else {
-            $this->url_controller = 'login';
         }
         $this->createController($this->url_controller);
     }
@@ -56,43 +44,6 @@ class Index
         unset($url[0], $url[1]);
 
         $this->url_params = array_values($url);
-    }
-    
-    /**
-     * Check if controller exist
-     * @return boolean
-     */
-    private function checkControllerExistence()
-    {
-        if (file_exists('controller/' . $this->url_controller . '.php')) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    /**
-     * Check if method exist
-     * @return boolean
-     */
-    private function checkMethodExistence()
-    {
-        if (method_exists($this->url_controller, $this->url_method)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    /**
-     * Construct controller
-     * @param type $controller
-     * @return \controller
-     */
-    private function createController($controller)
-    {
-        require_once 'controller/' . $controller . '.php';
-        return new $controller;
     }
 }
 

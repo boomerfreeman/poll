@@ -2,43 +2,75 @@
 
 class Controller
 {
-    public $model, $view, $username, $password;
+    protected $model;
+    /**
+     * @var null The controller
+     */
+    protected $url_controller = null;
+    /**
+     * @var null The method (of the above controller)
+     */
+    protected $url_method = null;
+    /**
+     * @var array URL parameters
+     */
+    protected $url_params = array();
     
-    public function __construct()
-    {
+    /**
+     * Main controller constructor
+     */
+    protected function __construct()
+    {   
         require_once '/model/model.php';
         $this->model = new Model();
-        
-//        if ((isset($_POST['username'])) && (isset($_POST['password'])) && ( ! empty($_POST['username'])) && ( ! empty($_POST['password']))) {
-//            
-//            $this->username = htmlspecialchars($_POST['username']);
-//            $this->password = htmlspecialchars($_POST['password']);
-//            
-//            // If user exists:
-//            if ($this->model->checkAuthorization($this->username, $this->password)) {
-//                
-//                // If admin:
-//                if ($this->model->checkAdminStatus($this->username) == 1) {
-//                    header("Location: /adminpanel.php");
-//                } else {
-//                    header("Location: /poll.php");
-//                }
-//            } else {
-//                require_once '/login.php';
-//                new Login();
-//            }
-//        } else {
-//            require_once '/login.php';
-//            new Login();
-//        }
     }
     
-    public function generateView($body = 'login')
+    /**
+     * Check controller existence
+     * @return boolean
+     */
+    protected function checkController()
+    {
+        if (file_exists('controller/' . $this->url_controller . '.php')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Check if method existence
+     * @return boolean
+     */
+    protected function checkMethod()
+    {
+        if (method_exists($this->url_controller, $this->url_method)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Construct controller
+     * @param type $controller
+     * @return void
+     */
+    protected function createController($controller)
+    {
+        require_once 'controller/' . $controller . '.php';
+        return new $controller;
+    }
+    
+    protected function generateView($body = 'login')
     {
         require_once '/view/header.php';
         require_once '/view/' . $body . '.php';
         require_once '/view/footer.php';
     }
+    
+    protected function showError($error)
+    {
+        echo $error;
+    }
 }
-
-//new Controller();

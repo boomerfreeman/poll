@@ -2,6 +2,10 @@
 
 class Model
 {
+    /**
+     * Database connection
+     * @return connection handle
+     */
     public function __construct()
     {
         require_once '/config/config.php';
@@ -12,6 +16,12 @@ class Model
         return $this->db;
     }
     
+    /**
+     * Check
+     * @param type $username
+     * @param type $password
+     * @return boolean
+     */
     public function checkAuthorization($username, $password)
     {
         $query = $this->db->prepare('SELECT `username`, `password` FROM `user` WHERE `username` = :username');

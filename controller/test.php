@@ -10,9 +10,6 @@ class Test extends Controller
     {
         parent::__construct();
         
-        require_once '../model/model.php';
-        new Model();
-        
         $this->func = $_POST['func'];
         $this->id = htmlspecialchars($_POST['id']);
         
