@@ -1,0 +1,16 @@
+body {
+    padding: 50px 300px;
+}
+
+.settings {
+    float: left;
+    width: 400px;
+    height: 150px;
+    padding: 30px;
+    border: 1px solid black;
+}
+
+.polls {
+    float: left;
+    padding: 30px;
+}

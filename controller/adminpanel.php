@@ -9,21 +9,35 @@ class AdminPanel extends Controller
     {
         parent::__construct();
         
+        if (isset($_POST['logout'])) {
+            $this->logOut();
+        }
+        
         if ((isset($_POST['activate'])) && (isset($_POST['poll']))) {
-            $this->activatePoll($_POST['poll']);
-            $this->showMessage("Poll {$_POST['poll']} is activated");
+            $this->activatePoll(htmlspecialchars($_POST['poll']));
+            $this->showMessage('Poll ' . htmlspecialchars($_POST['poll']) . ' is activated');
         }
         
         if ((isset($_POST['disable'])) && (isset($_POST['poll']))) {
-            $this->disablePoll($_POST['poll']);
-            $this->showMessage("Poll {$_POST['poll']} is disabled");
+            $this->disablePoll(htmlspecialchars($_POST['poll']));
+            $this->showMessage('Poll ' . htmlspecialchars($_POST['poll']) . ' is disabled');
         }
         
+        $poll['date'] = date("H:i:s d.m.Y");
         $poll['list'] = array_unique($this->model->showPolls(), SORT_REGULAR);
-        $poll['count'] = count($poll['list']);
-        $poll['i'] = 0;
         
         $this->generateView('adminpanel', $poll);
+    }
+    
+    /**
+     * Logout from administration panel
+     */
+    protected function logOut()
+    {
+        session_start();
+        session_destroy();
+        header("Location: http://poll/");
+        exit;
     }
     
     protected function activatePoll($id)
