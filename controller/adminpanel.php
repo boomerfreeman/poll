@@ -9,10 +9,11 @@ class AdminPanel extends Controller
     {
         parent::__construct();
         
-        $poll['list'] = array_unique($this->model->showActivePolls(), SORT_REGULAR);
-        $poll['count'] = count($poll['list']);
+//        $poll['list'] = array_unique($this->model->showActivePolls(), SORT_REGULAR);
+//        $poll['count'] = count($poll['list']);
         
         $this->generateView('adminpanel');
+        echo 'adminpanel';
     }
     
     public function test()

@@ -39,7 +39,7 @@ class Controller
     }
     
     /**
-     * Check if method existence
+     * Check method existence
      * @return boolean
      */
     protected function checkMethod()
@@ -62,7 +62,11 @@ class Controller
         return new $controller;
     }
     
-    protected function generateView($body = 'login')
+    /**
+     * Generate and show the specified page
+     * @param type $body
+     */
+    protected function generateView($body)
     {
         require_once '/view/header.php';
         require_once '/view/' . $body . '.php';

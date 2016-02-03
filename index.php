@@ -22,6 +22,7 @@ class Index extends Controller
                  * Create controller and call method if they have been set in URL
                  */
                 $this->checkMethod() ? $this->createController($this->url_controller)->{$this->url_method}() : null;
+                
             } else {
                 $this->url_controller = 'error';
             }

@@ -17,7 +17,7 @@ class Model
     }
     
     /**
-     * Check
+     * Check user credentials
      * @param type $username
      * @param type $password
      * @return boolean
@@ -28,10 +28,11 @@ class Model
         $query->execute(array(':username' => $username));
         $data = $query->fetch();
         
-        $user_db = $data->username;
-        $pass_db = $data->password;
-        
         if ($data) {
+            
+            $user_db = $data->username;
+            $pass_db = $data->password;
+            
             if (($username == $user_db) && (md5($password) == $pass_db)) {
                 return true;
             } else {
@@ -40,12 +41,22 @@ class Model
         }
     }
     
+    /**
+     * /**
+     * Check if user has administrator rights
+     * @param type $username
+     * @return boolean
+     */
     public function checkAdminStatus($username = null)
     {
         $query = $this->db->prepare('SELECT `group` FROM `user` WHERE `username` = :username');
         $query->execute(array(':username' => $username));
         
-        return $query->fetch()->group;
+        if ($query->fetch()->group == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public function showActivePolls()

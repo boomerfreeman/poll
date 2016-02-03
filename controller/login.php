@@ -5,9 +5,9 @@ require_once 'controller.php';
 // Controller for login page:
 class Login extends Controller
 {
-    private $username, $password;
+    protected $username, $password;
     
-    public function __construct()
+    protected function __construct()
     {
         parent::__construct();
         
@@ -20,9 +20,18 @@ class Login extends Controller
                 
                 session_start();
                 $_SESSION['logged'] = true;
+                
+                /**
+                 * Create administration panel if user has administrator rights, otherwise redirect to polls
+                 */
+                if ($this->model->checkAdminStatus($this->username)) {
+                    header("Location: http://" . $_SERVER['SERVER_NAME'] . '/adminpanel/');
+                } else {
+                    header("Location: http://" . $_SERVER['SERVER_NAME'] . '/poll/');
+                }
+                
             } else {
                 $this->showError('Incorrect username or password');
-                //$this->generateView('login');
             }
         } else {
             $this->generateView('login');

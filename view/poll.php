@@ -1,4 +1,3 @@
 <body>
-    <?= $poll['poll_number'] ?>
-    <?= $poll['answer'] ?>
+    Polls
 </body>
