@@ -23,6 +23,16 @@ class AdminPanel extends Controller
             $this->showMessage('Poll ' . htmlspecialchars($_POST['poll']) . ' is disabled');
         }
         
+        if ((isset($_POST['add'])) && (isset($_POST['poll']))) {
+            //$this->addPoll(htmlspecialchars($_POST['poll']));
+            $this->showMessage('New poll is added');
+        }
+        
+        if ((isset($_POST['delete'])) && (isset($_POST['poll']))) {
+            //$this->detelePoll(htmlspecialchars($_POST['poll']));
+            $this->showMessage('Poll ' . htmlspecialchars($_POST['poll']) . ' is deleted');
+        }
+        
         $poll['date'] = date("H:i:s d.m.Y");
         $poll['list'] = array_unique($this->model->showPolls(), SORT_REGULAR);
         
@@ -48,5 +58,15 @@ class AdminPanel extends Controller
     protected function disablePoll($id)
     {
         $this->model->disablePollInDB($id);
+    }
+    
+    protected function addPoll()
+    {
+        $this->model->addPollToDB();
+    }
+    
+    protected function deletePoll($id)
+    {
+        $this->model->deletePollFromDB($id);
     }
 }

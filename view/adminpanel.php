@@ -14,8 +14,8 @@
                 </select>
                 <input type="submit" name="activate" value="Activate poll">
                 <input type="submit" name="disable" value="Disable poll">
-                <input type="button" name="add" value="Add new poll">
-                <input type="button" name="delete" value="Delete poll">
+                <input type="submit" name="add" value="Add new poll">
+                <input type="submit" name="delete" value="Delete poll">
             </div>
             <!--<p class="test"></p>-->
         </form>

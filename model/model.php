@@ -59,6 +59,10 @@ class Model
         }
     }
     
+    /**
+     * Show all polls
+     * @return array
+     */
     public function showPolls()
     {
         $query = $this->db->query('SELECT `question_id`, `question` FROM `poll` ORDER BY `id`');
@@ -66,16 +70,32 @@ class Model
         return $query->fetchAll();
     }
     
+    /**
+     * Make poll visible for user
+     * @param type $id
+     */
     public function activatePollInDB($id)
     {
-        $query = $this->db->prepare('UPDATE `poll` SET `show` = 1 WHERE `question_id` = :id');
-        $query->execute(array(':id' => $id));
+        $query = $this->db->prepare('UPDATE `poll` SET `show` = 1, `mdate` = :mdate WHERE `question_id` = :id');
+        
+        $query->execute(array(
+            ':mdate' => date("Y-m-d H:i:s"),
+            ':id' => $id
+        ));
     }
     
+    /**
+     * Make poll hidden for user
+     * @param type $id
+     */
     public function disablePollInDB($id)
     {
-        $query = $this->db->prepare('UPDATE `poll` SET `show` = 0 WHERE `question_id` = :id');
-        $query->execute(array(':id' => $id));
+        $query = $this->db->prepare('UPDATE `poll` SET `show` = 0, `mdate` = :mdate WHERE `question_id` = :id');
+        
+        $query->execute(array(
+            ':mdate' => date("Y-m-d H:i:s"),
+            ':id' => $id
+        ));
     }
     
     public function addPollToDB()
@@ -85,10 +105,13 @@ class Model
         return $query->fetchAll();
     }
     
-    public function deletePollFromDB()
+    /**
+     * Delete poll from the database
+     * @param type $id
+     */
+    public function deletePollFromDB($id)
     {
-        $query = $this->db->query('SELECT `question` FROM `poll` ORDER BY `id`');
-        
-        return $query->fetchAll();
+        $query = $this->db->prepare('DELETE FROM `question` WHERE `question_id` = :id');
+        $query->execute(array(':id' => $id));
     }
 }

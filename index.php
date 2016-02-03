@@ -2,6 +2,9 @@
 
 require_once 'controller/controller.php';
 
+/**
+ * Routing class
+ */
 class Index extends Controller
 {
     public function __construct()
