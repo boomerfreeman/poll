@@ -66,14 +66,14 @@ class Controller
      * Generate and show the specified page
      * @param type $body
      */
-    protected function generateView($body)
+    protected function generateView($body = 'login', $params = array())
     {
         require_once '/view/header.php';
         require_once '/view/' . $body . '.php';
         require_once '/view/footer.php';
     }
     
-    protected function showError($error)
+    protected function showMessage($error)
     {
         echo $error;
     }

@@ -27,11 +27,11 @@ class Login extends Controller
                 if ($this->model->checkAdminStatus($this->username)) {
                     header("Location: http://" . $_SERVER['SERVER_NAME'] . '/adminpanel/');
                 } else {
-                    header("Location: http://" . $_SERVER['SERVER_NAME'] . '/poll/');
+                    header("Location: http://" . $_SERVER['SERVER_NAME'] . '/choice/');
                 }
                 
             } else {
-                $this->showError('Incorrect username or password');
+                $this->showMessage('Incorrect username or password');
             }
         } else {
             $this->generateView('login');

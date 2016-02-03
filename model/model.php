@@ -59,33 +59,33 @@ class Model
         }
     }
     
-    public function showActivePolls()
+    public function showPolls()
     {
-        $query = $this->db->query('SELECT `question` FROM `poll` WHERE `show` = 1 ORDER BY `id`');
+        $query = $this->db->query('SELECT `question_id`, `question` FROM `poll` ORDER BY `id`');
         
         return $query->fetchAll();
     }
     
-    public function activatePoll($id)
+    public function activatePollInDB($id)
     {
         $query = $this->db->prepare('UPDATE `poll` SET `show` = 1 WHERE `question_id` = :id');
         $query->execute(array(':id' => $id));
     }
     
-    public function disablePoll($id)
+    public function disablePollInDB($id)
     {
         $query = $this->db->prepare('UPDATE `poll` SET `show` = 0 WHERE `question_id` = :id');
         $query->execute(array(':id' => $id));
     }
     
-    public function addNewPoll()
+    public function addPollToDB()
     {
         $query = $this->db->query('SELECT `question` FROM `poll` ORDER BY `id`');
         
         return $query->fetchAll();
     }
     
-    public function deletePoll()
+    public function deletePollFromDB()
     {
         $query = $this->db->query('SELECT `question` FROM `poll` ORDER BY `id`');
         

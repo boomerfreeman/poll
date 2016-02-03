@@ -5,21 +5,34 @@ require_once 'controller.php';
 // Controller for administration panel:
 class AdminPanel extends Controller
 {
-    public function __construct()
+    protected function __construct()
     {
         parent::__construct();
         
-//        $poll['list'] = array_unique($this->model->showActivePolls(), SORT_REGULAR);
-//        $poll['count'] = count($poll['list']);
+        if ((isset($_POST['activate'])) && (isset($_POST['poll']))) {
+            $this->activatePoll($_POST['poll']);
+            $this->showMessage("Poll {$_POST['poll']} is activated");
+        }
         
-        $this->generateView('adminpanel');
-        echo 'adminpanel';
+        if ((isset($_POST['disable'])) && (isset($_POST['poll']))) {
+            $this->disablePoll($_POST['poll']);
+            $this->showMessage("Poll {$_POST['poll']} is disabled");
+        }
+        
+        $poll['list'] = array_unique($this->model->showPolls(), SORT_REGULAR);
+        $poll['count'] = count($poll['list']);
+        $poll['i'] = 0;
+        
+        $this->generateView('adminpanel', $poll);
     }
     
-    public function test()
+    protected function activatePoll($id)
     {
-        echo 'True';
+        $this->model->activatePollInDB($id);
+    }
+    
+    protected function disablePoll($id)
+    {
+        $this->model->disablePollInDB($id);
     }
 }
-
-//new AdminPanel();

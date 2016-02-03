@@ -1,7 +1,7 @@
 <?php
 
 // Controller for poll page:
-class Poll
+class Choice
 {
     public function __construct()
     {
