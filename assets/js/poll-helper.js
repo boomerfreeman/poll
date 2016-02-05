@@ -1,18 +1,17 @@
 $(document).ready(function () {
-    $(":button").on("click", function() {
-        
-        var func = $(this).attr("name");
-        var id = $(this).value;
-        console.log(id);
-        
-        $.ajax({
-            url: "../controller/test.php",
-            method: "post",
-            dataType: "text",
-            data: "func=" + func + "id=" + id,
-            success: function (data) {
-                $(".test").append(data);
-            }
-        });
+    
+    $(".new-poll-btn").on("click", function() {
+        $(".new-poll-menu").fadeIn("slow");
     });
+    
+    $(".new-answer-btn").on("click", function() {
+        $(".new-answer").append('Answer: <input type="text" name="answer[]"> Is correct? <input type="checkbox" name="correct[]"><br>');
+    });
+    
+//    $(".add-poll-btn").on("click", function(e) {
+//        e.preventDefault();
+//        
+//        var question = $(".question").val();
+//        console.log(question);
+//    });
 });

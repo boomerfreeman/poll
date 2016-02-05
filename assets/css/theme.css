@@ -1,5 +1,10 @@
 body {
-    padding: 50px 300px;
+    padding: 50px 200px;
+    min-width: 1000px;
+}
+
+.login {
+    padding: 10% 30%;
 }
 
 .settings {
@@ -13,4 +18,22 @@ body {
 .polls {
     float: left;
     padding: 30px;
+}
+
+.new-poll-menu {
+    width: 520px;
+    display: none;
+}
+
+.new-answer-btn {
+    margin: 15px 0;
+}
+
+.new-poll-main {
+    text-align: right;
+}
+
+.new-answer {
+    display: block;
+    text-align: right;
 }

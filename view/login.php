@@ -1,5 +1,5 @@
     <body>
-        <form action="http://poll/login/" method="post">
+        <form class="login" action="http://poll/login/" method="post">
             <label for="username">Username: </label>
             <input id="username" type="text" name="username" required>
             <label for="password">Password: </label>

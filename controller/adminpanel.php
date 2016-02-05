@@ -14,23 +14,27 @@ class AdminPanel extends Controller
         }
         
         if ((isset($_POST['activate'])) && (isset($_POST['poll']))) {
-            $this->activatePoll(htmlspecialchars($_POST['poll']));
-            $this->showMessage('Poll ' . htmlspecialchars($_POST['poll']) . ' is activated');
+            $poll_id = htmlspecialchars($_POST['poll']);
+            $this->activatePoll($poll_id);
+            $this->showMessage("Poll $poll_id is activated");
         }
         
         if ((isset($_POST['disable'])) && (isset($_POST['poll']))) {
-            $this->disablePoll(htmlspecialchars($_POST['poll']));
-            $this->showMessage('Poll ' . htmlspecialchars($_POST['poll']) . ' is disabled');
+            $poll_id = htmlspecialchars($_POST['poll']);
+            $this->disablePoll($poll_id);
+            $this->showMessage("Poll $poll_id is disabled");
         }
         
         if ((isset($_POST['add'])) && (isset($_POST['poll']))) {
-            //$this->addPoll(htmlspecialchars($_POST['poll']));
+            $question = htmlspecialchars($_POST['question']);
+            $this->addPoll($question, $_POST['answer'], $_POST['correct']);
             $this->showMessage('New poll is added');
         }
         
         if ((isset($_POST['delete'])) && (isset($_POST['poll']))) {
-            //$this->detelePoll(htmlspecialchars($_POST['poll']));
-            $this->showMessage('Poll ' . htmlspecialchars($_POST['poll']) . ' is deleted');
+            //$poll_id = htmlspecialchars($_POST['poll']);
+            //$this->detelePoll($poll_id);
+            $this->showMessage("Poll $poll_id is deleted");
         }
         
         $poll['date'] = date("H:i:s d.m.Y");
@@ -60,9 +64,9 @@ class AdminPanel extends Controller
         $this->model->disablePollInDB($id);
     }
     
-    protected function addPoll()
+    protected function addPoll($question, $answer, $correct)
     {
-        $this->model->addPollToDB();
+        $this->model->addPollToDB($question, $answer, $correct);
     }
     
     protected function deletePoll($id)

@@ -98,11 +98,16 @@ class Model
         ));
     }
     
-    public function addPollToDB()
+    public function addPollToDB($question, $answer, $correct)
     {
-        $query = $this->db->query('SELECT `question` FROM `poll` ORDER BY `id`');
+        $insert = "INSERT INTO `poll` (`question_id`, `question`, `answer`, `correct`, `show`, `cdate`, `mdate`) VALUES";
         
-        return $query->fetchAll();
+        foreach ($answer as $row) {
+            echo 'Q: ' . $question . ' A: ' . $row;
+        }
+        exit;
+        $query = $this->db->prepare($insert);
+        $query->execute(array(':id' => $id));
     }
     
     /**

@@ -14,11 +14,20 @@
                 </select>
                 <input type="submit" name="activate" value="Activate poll">
                 <input type="submit" name="disable" value="Disable poll">
-                <input type="submit" name="add" value="Add new poll">
                 <input type="submit" name="delete" value="Delete poll">
+                <input class="new-poll-btn" type="button" value="New poll">
+                <div class="new-poll-menu">
+                    <input class="add-poll-btn" type="submit" name="add" value="Add new poll">
+                    <input class="new-answer-btn" type="button" value="New answer">
+                    <div class="new-poll-main">
+                        Question: <input class="question" type="text" name="question">
+                        Answer: <input class="answer" type="text" name="answer[]">
+                        Is correct? <input class="correct" type="checkbox" name="correct[]">
+                    </div>
+                    <div class="new-answer"></div>
+                </div>
             </div>
-            <!--<p class="test"></p>-->
         </form>
-        <!--<script src="/assets/lib/jquery-1.11.3.min.js"></script>-->
-        <!--<script src="/assets/js/poll-helper.js"></script>-->
+        <script src="/assets/lib/jquery-1.11.3.min.js"></script>
+        <script src="/assets/js/poll-helper.js"></script>
     </body>
