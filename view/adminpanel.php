@@ -22,7 +22,11 @@
                     <div class="new-poll-main">
                         Question: <input class="question" type="text" name="question">
                         Answer: <input class="answer" type="text" name="answer[]">
-                        Is correct? <input class="correct" type="checkbox" name="correct[]">
+                        Is correct?
+                        <select name="correct[]">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
                     </div>
                     <div class="new-answer"></div>
                 </div>

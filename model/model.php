@@ -100,14 +100,27 @@ class Model
     
     public function addPollToDB($question, $answer, $correct)
     {
-        $insert = "INSERT INTO `poll` (`question_id`, `question`, `answer`, `correct`, `show`, `cdate`, `mdate`) VALUES";
+        $question_id = $this->getLastQuestionID() + 1;
         
-        foreach ($answer as $row) {
-            echo 'Q: ' . $question . ' A: ' . $row;
+        $rows = count($answer);
+        $date = date("Y-m-d H:i:s");
+        
+        for ($i=0; $i < $rows; $i++) {
+            
+            $insert = "INSERT INTO `poll` (`question_id`, `question`, `answer`, `correct`, `show`, `cdate`, `mdate`) VALUES (:question_id, :question, :answer, :correct, :show, :cdate, :mdate)";
+            
+            $query = $this->db->prepare($insert);
+            
+            $query->execute(array(
+                ':question_id' => $question_id,
+                ':question' => $question,
+                ':answer' => $answer[$i],
+                ':correct' => $correct[$i],
+                ':show' => 1,
+                ':cdate' => $date,
+                ':mdate' => $date)
+            );
         }
-        exit;
-        $query = $this->db->prepare($insert);
-        $query->execute(array(':id' => $id));
     }
     
     /**
@@ -118,5 +131,12 @@ class Model
     {
         $query = $this->db->prepare('DELETE FROM `question` WHERE `question_id` = :id');
         $query->execute(array(':id' => $id));
+    }
+    
+    private function getLastQuestionID()
+    {
+        $query = $this->db->query('SELECT MAX(`question_id`) as `id` FROM `poll`')->fetch();
+        
+        return $query->id;
     }
 }
