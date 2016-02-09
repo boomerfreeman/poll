@@ -98,10 +98,15 @@ class Model
         ));
     }
     
+    /**
+     * Add new poll to the database
+     * @param type $question
+     * @param type $answer
+     * @param type $correct
+     */
     public function addPollToDB($question, $answer, $correct)
     {
         $question_id = $this->getLastQuestionID() + 1;
-        
         $rows = count($answer);
         $date = date("Y-m-d H:i:s");
         
@@ -133,10 +138,19 @@ class Model
         $query->execute(array(':id' => $id));
     }
     
+    public function editPollInDB($id)
+    {
+        echo 'Edited';
+    }
+    
+    /**
+     * Get last poll ID from the database
+     * @return int
+     */
     private function getLastQuestionID()
     {
         $query = $this->db->query('SELECT MAX(`question_id`) as `id` FROM `poll`')->fetch();
         
-        return $query->id;
+        return (int) $query->id;
     }
 }

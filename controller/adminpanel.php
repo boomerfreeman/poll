@@ -5,36 +5,43 @@ require_once 'controller.php';
 // Controller for administration panel:
 class AdminPanel extends Controller
 {
+    protected $poll;
+    
     protected function __construct()
     {
         parent::__construct();
         
-        if (isset($_POST['logout'])) {
-            $this->logOut();
+        isset($_POST['logout']) ? $this->logOut() : null;
+        
+        isset($_POST['poll']) ? $this->poll = htmlspecialchars($_POST['poll']) : null;
+        
+        if (isset($_POST['activate'])) {
+            $this->activatePoll();
+            $this->showMessage("Poll $this->poll is activated");
         }
         
-        if ((isset($_POST['activate'])) && (isset($_POST['poll']))) {
-            $poll_id = htmlspecialchars($_POST['poll']);
-            $this->activatePoll($poll_id);
-            $this->showMessage("Poll $poll_id is activated");
+        if (isset($_POST['disable'])) {
+            $this->disablePoll();
+            $this->showMessage("Poll $this->poll is disabled");
         }
         
-        if ((isset($_POST['disable'])) && (isset($_POST['poll']))) {
-            $poll_id = htmlspecialchars($_POST['poll']);
-            $this->disablePoll($poll_id);
-            $this->showMessage("Poll $poll_id is disabled");
+        if (isset($_POST['edit'])) {
+            $this->editPoll();
+            $this->showMessage("Poll $this->poll is edited");
         }
         
-        if ((isset($_POST['add'])) && (isset($_POST['poll']))) {
-            $question = htmlspecialchars($_POST['question']);
-            $this->addPoll($question, $_POST['answer'], $_POST['correct']);
-            $this->showMessage('New poll is added');
+        if (isset($_POST['add'])) {
+            if (( ! empty($_POST['question'])) && ( ! empty($_POST['answer'])) && ( ! empty($_POST['correct']))) {
+                $this->addPoll($_POST['question'], $_POST['answer'], $_POST['correct']);
+                $this->showMessage('New poll is added');
+            } else {
+                $this->showMessage('Some fields are empty...');
+            }
         }
         
-        if ((isset($_POST['delete'])) && (isset($_POST['poll']))) {
-            //$poll_id = htmlspecialchars($_POST['poll']);
-            //$this->detelePoll($poll_id);
-            $this->showMessage("Poll $poll_id is deleted");
+        if (isset($_POST['delete'])) {
+            //$this->detelePoll();
+            $this->showMessage("Poll $this->poll is deleted");
         }
         
         $poll['date'] = date("H:i:s d.m.Y");
@@ -54,14 +61,19 @@ class AdminPanel extends Controller
         exit;
     }
     
-    protected function activatePoll($id)
+    protected function activatePoll()
     {
-        $this->model->activatePollInDB($id);
+        $this->model->activatePollInDB($this->poll);
     }
     
-    protected function disablePoll($id)
+    protected function disablePoll()
     {
-        $this->model->disablePollInDB($id);
+        $this->model->disablePollInDB($this->poll);
+    }
+    
+    protected function editPoll()
+    {
+        $this->model->editPollInDB($this->poll);
     }
     
     protected function addPoll($question, $answer, $correct)
@@ -69,8 +81,8 @@ class AdminPanel extends Controller
         $this->model->addPollToDB($question, $answer, $correct);
     }
     
-    protected function deletePoll($id)
+    protected function deletePoll()
     {
-        $this->model->deletePollFromDB($id);
+        $this->model->deletePollFromDB($this->poll);
     }
 }

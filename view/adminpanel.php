@@ -14,8 +14,21 @@
                 </select>
                 <input type="submit" name="activate" value="Activate poll">
                 <input type="submit" name="disable" value="Disable poll">
+                <input type="submit" name="edit" value="Edit poll">
                 <input type="submit" name="delete" value="Delete poll">
                 <input class="new-poll-btn" type="button" value="New poll">
+                <div class="edit-poll-menu">
+                    <input class="edit-poll-btn" type="button" value="Edit this poll">
+                    <div class="new-poll-main">
+                        Question: <input class="question" type="text" name="question">
+                        Answer: <input class="answer" type="text" name="answer[]">
+                        Is correct?
+                        <select name="correct[]">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="new-poll-menu">
                     <input class="add-poll-btn" type="submit" name="add" value="Add new poll">
                     <input class="new-answer-btn" type="button" value="New answer">
