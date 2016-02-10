@@ -20,21 +20,12 @@
                 <!-- Edit poll menu -->
                 <div class="edit-poll-menu"></div>
                 <!-- Add new poll menu -->
-<!--                <div class="new-poll-menu">
-                    <input class="send-btn" type="submit" name="add" value="Add new poll">
-                    <input class="new-answer-btn" type="button" value="New answer">
-                    <input class="cancel-new-btn" type="button" value="Cancel">
-                    <div class="new-poll-main">
-                        Question: <input class="question" type="text" name="question">
-                        Answer: <input class="answer" type="text" name="answer[]">
-                        Is correct?
-                        <select name="correct[]">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="new-answer"></div>
-                </div>-->
+                <div class="new-poll-menu"></div>
+                <div class="error">
+                    <?php if (isset($params['message'])) {
+                        echo $params['message'];
+                    } ?>
+                </div>
             </div>
         </form>
         <script src="/assets/lib/jquery-1.11.3.min.js"></script>

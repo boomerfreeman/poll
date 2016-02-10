@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Main model class
+ */
 class Model
 {
     /**

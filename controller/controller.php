@@ -1,25 +1,37 @@
 <?php
 
+/**
+ * Main controller class
+ */
 class Controller
 {
-    protected $model;
     /**
-     * @var null The controller
+     * The controller
+     * @var null
      */
-    protected $url_controller = null;
+    public $url_controller = null;
+    
     /**
-     * @var null The method (of the above controller)
+     * The method (of the above controller)
+     * @var null
      */
-    protected $url_method = null;
+    public $url_method = null;
+    
     /**
-     * @var array URL parameters
+     * URL parameters
+     * @var array
      */
-    protected $url_params = array();
+    public $url_params = array();
+    
+    /**
+     * @var null 
+     */
+    public $model = null;
     
     /**
      * Main controller constructor
      */
-    protected function __construct()
+    public function __construct()
     {   
         require_once '/model/model.php';
         $this->model = new Model();
@@ -29,7 +41,7 @@ class Controller
      * Check controller existence
      * @return boolean
      */
-    protected function checkController()
+    public function checkController()
     {
         if (file_exists('controller/' . $this->url_controller . '.php')) {
             return true;
@@ -42,7 +54,7 @@ class Controller
      * Check method existence
      * @return boolean
      */
-    protected function checkMethod()
+    public function checkMethod()
     {
         if (method_exists($this->url_controller, $this->url_method)) {
             return true;
@@ -56,7 +68,7 @@ class Controller
      * @param type $controller
      * @return void
      */
-    protected function createController($controller)
+    public function createController($controller)
     {
         require_once 'controller/' . $controller . '.php';
         return new $controller;
@@ -66,7 +78,7 @@ class Controller
      * Generate and show the specified page
      * @param type $body
      */
-    protected function generateView($body = 'login', $params = array())
+    public function generateView($body = 'login', $params = array())
     {
         require_once '/view/header.php';
         require_once '/view/' . $body . '.php';
@@ -74,11 +86,13 @@ class Controller
     }
     
     /**
-     * Print out a text message
-     * @param type $error
+     * Logout from administration panel
      */
-    protected function showMessage($message)
+    public function logOut()
     {
-        echo $message;
+        session_start();
+        session_destroy();
+        header("Location: http://poll/");
+        exit;
     }
 }

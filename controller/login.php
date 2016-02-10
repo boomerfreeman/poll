@@ -5,9 +5,9 @@ require_once 'controller.php';
 // Controller for login page:
 class Login extends Controller
 {
-    protected $username, $password;
+    public $username, $password;
     
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct();
         

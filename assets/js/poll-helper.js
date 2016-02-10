@@ -27,15 +27,15 @@ $(document).ready(function () {
 
                     $.each(data, function(key, value) {
                         $(".edit-poll-menu").append('Answer: <input type="text" name="answer[]" value="' + value["answer"] + '"> ');
-                        $(".edit-poll-menu").append('Is correct? <select class="poll-list-edit_' + key + '" name="correct[]"><option value="1">Yes</option><option value="0">No</option></select><br>');
+                        $(".edit-poll-menu").append('Is correct? <select class="poll-list-edit_' + key + '" name="correct[]"><option value="0">No</option><option value="1">Yes</option></select><br>');
                         
                         $(".poll-list-edit_" + key).val(value["correct"]);
                     });
                     
                     // Hide editing poll form
                     $(".cancel-edit-btn").on("click", function() {
-                        $(".edit-poll-menu").fadeOut("slow").empty();
                         edit_poll--;
+                        $(".edit-poll-menu").fadeOut("slow").empty();
                     });
                 }
             });
@@ -44,30 +44,47 @@ $(document).ready(function () {
         }
     });
     
-    // Answer block default value
-    var new_answer = 1;
+    // New poll menu counter
+    var new_poll = 0;
     
     // Show new poll adding form
     $(".new-poll-btn").on("click", function() {
-        $(".new-poll-menu").fadeIn("slow");
-    });
-    
-    // Create new answer block with limit of 5 rows
-    $(".new-answer-btn").on("click", function() {
         
-        if (new_answer < 5) {
-            
-            new_answer++;
-            
-            $(".new-answer").append('Answer: <input type="text" name="answer[]"> ');
-            $(".new-answer").append('Is correct? <select name="correct[]"><option value="1">Yes</option><option value="0">No</option></select><br>');
+        if (new_poll >= 1) {
+            alert('Finish with this poll first');
+            return false;
         } else {
-            alert("Maximum 5 rows allowed");
+            
+            new_poll++;
+            
+            // Answer block default value
+            var new_answer = 1;
+            
+            $(".new-poll-menu").append('<input class="send-btn" type="submit" name="add" value="Add new poll"><input class="new-answer-btn" type="button" value="New answer"><input class="cancel-new-btn" type="button" value="Cancel">');
+            $(".new-poll-menu").append('<div class="new-poll-main">Question: <input class="question" type="text" name="question"> Answer: <input class="answer" type="text" name="answer[]"> Is correct? <select name="correct[]"><option value="0">No</option><option value="1">Yes</option></select></div>');
+            $(".new-poll-menu").append('<div class="new-answer"></div>');
+            
+            // Create new answer block with limit of 5 rows
+            $(".new-answer-btn").on("click", function() {
+
+                if (new_answer < 5) {
+
+                    new_answer++;
+
+                    $(".new-answer").append('Answer: <input type="text" name="answer[]"> ');
+                    $(".new-answer").append('Is correct? <select name="correct[]"><option value="0">No</option><option value="1">Yes</option></select><br>');
+                } else {
+                    alert("Maximum 5 rows allowed");
+                }
+            });
+            
+            // Hide new poll adding form
+            $(".cancel-new-btn").on("click", function() {
+                new_poll--;
+                $(".new-poll-menu").fadeOut("slow").empty();
+            });
+            
+            $(".new-poll-menu").fadeIn("slow");
         }
-    });
-    
-    // Hide new poll adding form
-    $(".cancel-new-btn").on("click", function() {
-        $(".new-poll-menu").fadeOut("slow").empty();
     });
 });

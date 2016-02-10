@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Ajax query controller
+ */
 class Ajax extends Controller
 {
     public function __construct()

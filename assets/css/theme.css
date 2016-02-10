@@ -22,7 +22,6 @@ body {
 
 .new-poll-menu {
     width: 550px;
-    display: none;
 }
 
 .new-answer-btn {
@@ -41,7 +40,6 @@ body {
 
 .edit-poll-menu {
     width: 550px;
-    display: none;
     text-align: right;
 }
 
@@ -59,4 +57,8 @@ body {
 
 .cancel-edit-btn {
     margin-left: 15px;
+}
+
+.error {
+    padding: 100px;
 }
