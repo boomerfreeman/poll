@@ -26,14 +26,37 @@ body {
 }
 
 .new-answer-btn {
-    margin: 15px 0;
+    margin: 0 15px;
 }
 
 .new-poll-main {
+    margin-top: 15px;
     text-align: right;
 }
 
 .new-answer {
     display: block;
     text-align: right;
+}
+
+.edit-poll-menu {
+    width: 550px;
+    display: none;
+    text-align: right;
+}
+
+.edit-poll-main {
+    text-align: right;
+}
+
+.edit-poll-btns {
+    text-align: left;
+}
+
+.send-btn {
+    margin-top: 20px;
+}
+
+.cancel-edit-btn {
+    margin-left: 15px;
 }

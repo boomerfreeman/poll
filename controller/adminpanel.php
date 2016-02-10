@@ -26,8 +26,13 @@ class AdminPanel extends Controller
         }
         
         if (isset($_POST['edit'])) {
-            $this->editPoll();
-            $this->showMessage("Poll $this->poll is edited");
+            //print_r($_POST);
+            if (( ! empty($_POST['question'])) && ( ! empty($_POST['answer'])) && ( ! empty($_POST['correct']))) {
+                $this->editPoll($_POST['question'], $_POST['answer'], $_POST['correct']);
+                $this->showMessage("Poll $this->poll is edited");
+            } else {
+                $this->showMessage('Some fields are empty...');
+            }
         }
         
         if (isset($_POST['add'])) {
@@ -40,6 +45,7 @@ class AdminPanel extends Controller
         }
         
         if (isset($_POST['delete'])) {
+            print_r($_POST);
             //$this->detelePoll();
             $this->showMessage("Poll $this->poll is deleted");
         }
@@ -71,9 +77,9 @@ class AdminPanel extends Controller
         $this->model->disablePollInDB($this->poll);
     }
     
-    protected function editPoll()
+    protected function editPoll($question, $answer, $correct)
     {
-        $this->model->editPollInDB($this->poll);
+        $this->model->editPollInDB($this->poll, $question, $answer, $correct);
     }
     
     protected function addPoll($question, $answer, $correct)

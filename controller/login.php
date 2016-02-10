@@ -21,9 +21,7 @@ class Login extends Controller
                 session_start();
                 $_SESSION['logged'] = true;
                 
-                /**
-                 * Redirect user to administration panel if he has rights, otherwise redirect to polls
-                 */
+                // Redirect user to administration panel if he has rights, otherwise redirect to polls
                 if ($this->model->checkAdminStatus($this->username)) {
                     header("Location: http://" . $_SERVER['SERVER_NAME'] . '/adminpanel/');
                 } else {

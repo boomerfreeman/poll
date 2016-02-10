@@ -6,32 +6,24 @@
                 <input type="submit" name="logout" value="Logout">
             </div>
             <div class="polls">
-                <h2>All polls in the database for <?= $params['date'] ?>:</h2>
-                <select name="poll">
+                <h2>All polls in the database for <?= $params['date'] ?></h2>
+                <select class="poll-list" name="poll">
                 <?php foreach ($params['list'] as $poll): ?>
                     <option value="<?= $poll->question_id ?>"><?= $poll->question ?></option>
                 <?php endforeach ?>
                 </select>
                 <input type="submit" name="activate" value="Activate poll">
                 <input type="submit" name="disable" value="Disable poll">
-                <input type="submit" name="edit" value="Edit poll">
+                <input class="edit-poll-btn" type="button" value="Edit poll">
                 <input type="submit" name="delete" value="Delete poll">
                 <input class="new-poll-btn" type="button" value="New poll">
-                <div class="edit-poll-menu">
-                    <input class="edit-poll-btn" type="button" value="Edit this poll">
-                    <div class="new-poll-main">
-                        Question: <input class="question" type="text" name="question">
-                        Answer: <input class="answer" type="text" name="answer[]">
-                        Is correct?
-                        <select name="correct[]">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="new-poll-menu">
-                    <input class="add-poll-btn" type="submit" name="add" value="Add new poll">
+                <!-- Edit poll menu -->
+                <div class="edit-poll-menu"></div>
+                <!-- Add new poll menu -->
+<!--                <div class="new-poll-menu">
+                    <input class="send-btn" type="submit" name="add" value="Add new poll">
                     <input class="new-answer-btn" type="button" value="New answer">
+                    <input class="cancel-new-btn" type="button" value="Cancel">
                     <div class="new-poll-main">
                         Question: <input class="question" type="text" name="question">
                         Answer: <input class="answer" type="text" name="answer[]">
@@ -42,7 +34,7 @@
                         </select>
                     </div>
                     <div class="new-answer"></div>
-                </div>
+                </div>-->
             </div>
         </form>
         <script src="/assets/lib/jquery-1.11.3.min.js"></script>

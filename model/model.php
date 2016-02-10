@@ -61,7 +61,7 @@ class Model
     
     /**
      * Show all polls
-     * @return array
+     * @return object
      */
     public function showPolls()
     {
@@ -98,15 +98,24 @@ class Model
         ));
     }
     
+    public function editPollInDB($id, $question, $answer, $correct)
+    {
+        $this->deletePollFromDB($id);
+        $this->addPollToDB($question, $answer, $correct, $id);
+    }
+    
     /**
      * Add new poll to the database
      * @param type $question
      * @param type $answer
      * @param type $correct
      */
-    public function addPollToDB($question, $answer, $correct)
+    public function addPollToDB($question, $answer, $correct, $question_id = null)
     {
-        $question_id = $this->getLastQuestionID() + 1;
+        if ($question_id == null) {
+            $question_id = $this->getLastQuestionID() + 1;
+        }
+        
         $rows = count($answer);
         $date = date("Y-m-d H:i:s");
         
@@ -134,13 +143,21 @@ class Model
      */
     public function deletePollFromDB($id)
     {
-        $query = $this->db->prepare('DELETE FROM `question` WHERE `question_id` = :id');
+        $query = $this->db->prepare('DELETE FROM `poll` WHERE `question_id` = :id');
         $query->execute(array(':id' => $id));
     }
     
-    public function editPollInDB($id)
+    /**
+     * Fetch poll data with certain ID
+     * @param type $id
+     * @return object
+     */
+    public function getPollData($id)
     {
-        echo 'Edited';
+        $query = $this->db->prepare('SELECT `question_id`, `question`, `answer`, `correct`, `show` FROM `poll` WHERE `question_id` = :id');
+        $query->execute(array(':id' => $id));
+        
+        return $query->fetchAll();
     }
     
     /**

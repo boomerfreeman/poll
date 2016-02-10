@@ -73,8 +73,12 @@ class Controller
         require_once '/view/footer.php';
     }
     
-    protected function showMessage($error)
+    /**
+     * Print out a text message
+     * @param type $error
+     */
+    protected function showMessage($message)
     {
-        echo $error;
+        echo $message;
     }
 }
