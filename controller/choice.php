@@ -1,12 +1,21 @@
 <?php
 
-// Controller for poll page:
-class Choice
+require_once 'controller.php';
+
+/**
+ * Poll page controller
+ */
+class Choice extends Controller
 {
     public function __construct()
     {
-        require_once 'view/header.php';
-        require_once 'view/poll.php';
-        require_once 'view/footer.php';
+        parent::__construct();
+        
+        isset($_POST['logout']) ? $this->logOut() : null;
+        
+        $poll['list'] = array_unique($this->model->showActivePolls(), SORT_REGULAR);
+        $poll['date'] = date("H:i:s d.m.Y");
+        
+        $this->generateView('poll', $poll);
     }
 }

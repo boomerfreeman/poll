@@ -73,6 +73,13 @@ class Model
         return $query->fetchAll();
     }
     
+    public function showActivePolls()
+    {
+        $query = $this->db->query('SELECT `question_id`, `question` FROM `poll` WHERE `show` = 1 ORDER BY `id`');
+        
+        return $query->fetchAll();
+    }
+    
     /**
      * Make poll visible for user
      * @param type $id
