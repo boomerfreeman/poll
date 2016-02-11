@@ -8,7 +8,7 @@ $(document).ready(function () {
         
         if (edit_poll >= 1) {
             alert('Only one poll can be edited at the same time');
-            return false;
+            return;
         } else {
             
             edit_poll++;
@@ -52,7 +52,7 @@ $(document).ready(function () {
         
         if (new_poll >= 1) {
             alert('Finish with this poll first');
-            return false;
+            return;
         } else {
             
             new_poll++;
@@ -75,6 +75,7 @@ $(document).ready(function () {
                     $(".new-answer").append('Is correct? <select name="correct[]"><option value="0">No</option><option value="1">Yes</option></select><br>');
                 } else {
                     alert("Maximum 5 rows allowed");
+                    return;
                 }
             });
             
