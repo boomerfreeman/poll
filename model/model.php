@@ -45,7 +45,6 @@ class Model
     }
     
     /**
-     * /**
      * Check if user has administrator rights
      * @param type $username
      * @return boolean
@@ -63,6 +62,19 @@ class Model
     }
     
     /**
+     * Fetch user ID by username
+     * @param type $username
+     * @return object
+     */
+    public function getUserID($username = 'user')
+    {
+        $query = $this->db->prepare('SELECT `id` FROM `user` WHERE `username` = :username');
+        $query->execute(array(':username' => $username));
+        
+        return $query->fetch()->id;
+    }
+    
+    /**
      * Show all tests
      * @return object
      */
@@ -73,6 +85,10 @@ class Model
         return $query->fetchAll();
     }
     
+    /**
+     * Show active tests for user
+     * @return object
+     */
     public function showActiveTests()
     {
         $query = $this->db->query('SELECT `question_id`, `question` FROM `test` WHERE `show` = 1 ORDER BY `question_id`');
@@ -108,6 +124,13 @@ class Model
         ));
     }
     
+    /**
+     * Remove and add new test to the database
+     * @param type $id
+     * @param type $question
+     * @param type $answers
+     * @param type $correct
+     */
     public function editTestInDB($id, $question, $answers, $correct)
     {
         $this->deleteTestFromDB($id);
@@ -127,7 +150,6 @@ class Model
         }
         
         $rows = count($answers);
-        $date = date("Y-m-d H:i:s");
         
         for ($i=0; $i < $rows; $i++) {
             
@@ -141,9 +163,9 @@ class Model
                 ':answer' => $answers[$i],
                 ':correct' => $correct[$i],
                 ':show' => 1,
-                ':cdate' => $date,
-                ':mdate' => $date)
-            );
+                ':cdate' => date("Y-m-d H:i:s"),
+                ':mdate' => date("Y-m-d H:i:s")
+            ));
         }
     }
     
@@ -176,7 +198,7 @@ class Model
      * @param type $answers
      * @return boolean
      */
-    public function controlTestAnswer($id, $answers)
+    public function controlUserAnswer($id, $answers)
     {
         $query = $this->db->prepare('SELECT `answer` FROM `test` WHERE `question_id` = :id AND `correct` = 1');
         $query->execute(array(':id' => $id));
@@ -184,32 +206,64 @@ class Model
         $result = $query->fetchAll();
         
         $user_answers = count($answers);
-        $db_answers = count($query->rowCount());
+        $db_answers = $query->rowCount();
         
         if ($db_answers > 0) {
             
             if ($user_answers != $db_answers) {
+                $this->saveUserAnswer($id, $answers, 0);
                 return false;
             } else {
-
                 $i = 0;
                 $true = 0;
-
+                
                 foreach ($result as $row => $link) {
-
                     if ($answers[$i] == $link->answer) {
                         $true++;
                         $i++;
                     }
                 }
-
+                
                 if ($true != $db_answers) {
+                    $this->saveUserAnswer($id, $answers, 0);
                     return false;
                 } else {
+                    $this->saveUserAnswer($id, $answers, 1);
                     return true;
                 }
             }
         }
+    }
+    
+    /**
+     * Save right or wrong user answer to the database
+     * @param type $question_id
+     * @param type $answers
+     * @param type $correct
+     */
+    private function saveUserAnswer($question_id, $answers, $correct)
+    {
+        $query = $this->db->prepare('INSERT INTO `progress` (`user_id`, `question_id`, `user_answer`, `correct`, `cdate`) VALUES (:user_id, :question_id, :user_answer, :correct, :cdate)');
+        
+        session_start();
+        
+        $user_id = $this->getUserID($_SESSION['username']);
+        
+        $list = null;
+        
+        foreach ($answers as $answer) {
+            $list .= $answer . ', ';
+        }
+        
+        $answer = substr($list, 0, -2);
+        
+        $query->execute(array(
+            ':user_id' => $user_id,
+            ':question_id' => $question_id,
+            ':user_answer' => $answer,
+            ':correct' => $correct,
+            ':cdate' => date("Y-m-d H:i:s")
+        ));
     }
     
     /**
@@ -220,6 +274,8 @@ class Model
     {
         $query = $this->db->query('SELECT MAX(`question_id`) as `id` FROM `test`')->fetch();
         
-        return (int) $query->id;
+        if ($query->rowCount()) {
+            return (int) $query->id;
+        }
     }
 }

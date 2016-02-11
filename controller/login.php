@@ -20,6 +20,7 @@ class Login extends Controller
                 
                 session_start();
                 $_SESSION['logged'] = true;
+                $_SESSION['username'] = $this->username;
                 
                 // Redirect user to administration panel if he has rights, otherwise redirect to tests
                 if ($this->model->checkAdminStatus($this->username)) {

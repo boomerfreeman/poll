@@ -22,13 +22,14 @@ class Choice extends Controller
         isset($_POST['check']) ? $this->answer = $_POST['check'] : null;
         
         if (isset($_POST['answer'])) {
+            
             $id = htmlspecialchars($_POST['question_id']);
             $data = $this->controlAnswer($id);
             
             if ($data) {
-                echo 'Correct';
+                $test['message'] = "Correct answer. Well done!";
             } else {
-                echo 'Wrong';
+                $test['message'] = "No, you are wrong";
             }
         }
         
@@ -40,6 +41,6 @@ class Choice extends Controller
     
     private function controlAnswer($id)
     {
-        return $this->model->controlTestAnswer($id, $this->answer);
+        return $this->model->controlUserAnswer($id, $this->answer);
     }
 }

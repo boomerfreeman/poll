@@ -64,10 +64,6 @@ h2 {
     margin-left: 15px;
 }
 
-.msg {
-    padding: 60px;
-}
-
 .start-test-btn {
     margin-left: 15px;
 }
@@ -84,4 +80,8 @@ h2 {
 
 .cancel-test-btn {
     margin-left: 15px;
+}
+
+.msg {
+    padding: 60px;
 }

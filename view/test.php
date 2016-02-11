@@ -16,6 +16,11 @@
                 <input class="cancel-test-btn" type="button" value="Cancel">
             </div>
             <div class="answer-test-menu"></div>
+            <div class="msg">
+                <?php if (isset($params['message'])) {
+                    echo $params['message'];
+                } ?>
+            </div>
         </form>
         <script src="/assets/lib/jquery-1.11.3.min.js"></script>
         <script src="/assets/js/test-helper.js"></script>
