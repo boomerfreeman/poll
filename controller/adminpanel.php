@@ -7,7 +7,7 @@ require_once 'controller.php';
  */
 class AdminPanel extends Controller
 {
-    private $poll;
+    private $test;
     
     public function __construct()
     {
@@ -15,69 +15,69 @@ class AdminPanel extends Controller
         
         isset($_POST['logout']) ? $this->logOut() : null;
         
-        isset($_POST['poll']) ? $this->poll = htmlspecialchars($_POST['poll']) : null;
+        isset($_POST['test']) ? $this->test = htmlspecialchars($_POST['test']) : null;
         
         if (isset($_POST['activate'])) {
-            $this->activatePoll();
-            $poll['message'] = "Poll $this->poll is activated";
+            $this->activateTest();
+            $test['message'] = "Test $this->test is activated";
         }
         
         if (isset($_POST['disable'])) {
-            $this->disablePoll();
-            $poll['message'] = "Poll $this->poll is disabled";
+            $this->disableTest();
+            $test['message'] = "Test $this->test is disabled";
         }
         
         if (isset($_POST['edit'])) {
             if (( ! empty($_POST['question'])) && ( ! empty($_POST['answer'])) && ( ! empty($_POST['correct']))) {
-                $this->editPoll($_POST['question'], $_POST['answer'], $_POST['correct']);
-                $poll['message'] = "Poll $this->poll is edited";
+                $this->editTest($_POST['question'], $_POST['answer'], $_POST['correct']);
+                $test['message'] = "Test $this->test is edited";
             } else {
-                $poll['message'] = 'Some fields are empty...';
+                $test['message'] = 'Some fields are empty...';
             }
         }
         
         if (isset($_POST['add'])) {
             if (( ! empty($_POST['question'])) && ( ! empty($_POST['answer'])) && ( ! empty($_POST['correct']))) {
-                $this->addPoll($_POST['question'], $_POST['answer'], $_POST['correct']);
-                $poll['message'] = 'New poll is added';
+                $this->addTest($_POST['question'], $_POST['answer'], $_POST['correct']);
+                $test['message'] = 'New test is added';
             } else {
-                $poll['message'] = 'Some fields are empty...';
+                $test['message'] = 'Some fields are empty...';
             }
         }
         
         if (isset($_POST['delete'])) {
-            $this->deletePoll();
-            $poll['message'] = "Poll $this->poll is deleted";
+            $this->deleteTest();
+            $test['message'] = "Test $this->test is deleted";
         }
         
-        $poll['date'] = date("H:i:s d.m.Y");
-        $poll['list'] = array_unique($this->model->showPolls(), SORT_REGULAR);
+        $test['date'] = date("H:i:s d.m.Y");
+        $test['list'] = array_unique($this->model->showTests(), SORT_REGULAR);
         
-        $this->generateView('adminpanel', $poll);
+        $this->generateView('adminpanel', $test);
     }
     
-    private function activatePoll()
+    private function activateTest()
     {
-        $this->model->activatePollInDB($this->poll);
+        $this->model->activateTestInDB($this->test);
     }
     
-    private function disablePoll()
+    private function disableTest()
     {
-        $this->model->disablePollInDB($this->poll);
+        $this->model->disableTestInDB($this->test);
     }
     
-    private function editPoll($question, $answer, $correct)
+    private function editTest($question, $answer, $correct)
     {
-        $this->model->editPollInDB($this->poll, $question, $answer, $correct);
+        $this->model->editTestInDB($this->test, $question, $answer, $correct);
     }
     
-    private function addPoll($question, $answer, $correct)
+    private function addTest($question, $answer, $correct)
     {
-        $this->model->addPollToDB($question, $answer, $correct);
+        $this->model->addTestToDB($question, $answer, $correct);
     }
     
-    private function deletePoll()
+    private function deleteTest()
     {
-        $this->model->deletePollFromDB($this->poll);
+        $this->model->deleteTestFromDB($this->test);
     }
 }

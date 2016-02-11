@@ -21,11 +21,11 @@ class Login extends Controller
                 session_start();
                 $_SESSION['logged'] = true;
                 
-                // Redirect user to administration panel if he has rights, otherwise redirect to polls
+                // Redirect user to administration panel if he has rights, otherwise redirect to tests
                 if ($this->model->checkAdminStatus($this->username)) {
-                    header("Location: http://" . $_SERVER['SERVER_NAME'] . '/adminpanel/');
+                    header('Location: ' . URL_PROTOCOL . URL_DOMAIN . '/adminpanel/');
                 } else {
-                    header("Location: http://" . $_SERVER['SERVER_NAME'] . '/choice/');
+                    header('Location: ' . URL_PROTOCOL . URL_DOMAIN . '/choice/');
                 }
                 
             } else {

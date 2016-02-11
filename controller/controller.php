@@ -92,7 +92,7 @@ class Controller
     {
         session_start();
         session_destroy();
-        header("Location: http://poll/");
+        header('Location: ' . URL_PROTOCOL . URL_DOMAIN);
         exit;
     }
 }

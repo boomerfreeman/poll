@@ -3,8 +3,13 @@ body {
     min-width: 1200px;
 }
 
+h2 {
+    text-align: center;
+}
+
 .login {
-    padding: 10% 30%;
+    padding-top: 150px;
+    text-align: center;
 }
 
 .settings {
@@ -15,12 +20,12 @@ body {
     border: 1px solid black;
 }
 
-.polls {
+.tests {
     float: left;
-    padding: 30px;
+    padding-left: 50px;
 }
 
-.new-poll-menu {
+.new-test-menu {
     width: 550px;
 }
 
@@ -28,7 +33,7 @@ body {
     margin: 0 15px;
 }
 
-.new-poll-main {
+.new-test-main {
     margin-top: 15px;
     text-align: right;
 }
@@ -38,16 +43,16 @@ body {
     text-align: right;
 }
 
-.edit-poll-menu {
+.edit-test-menu {
     width: 550px;
     text-align: right;
 }
 
-.edit-poll-main {
+.edit-test-main {
     text-align: right;
 }
 
-.edit-poll-btns {
+.edit-test-btns {
     text-align: left;
 }
 
@@ -59,6 +64,24 @@ body {
     margin-left: 15px;
 }
 
-.error {
-    padding: 100px;
+.msg {
+    padding: 60px;
+}
+
+.start-test-btn {
+    margin-left: 15px;
+}
+
+.answer-test-menu {
+    float: left;
+    width: 800px;
+    padding: 50px;
+}
+
+.answer-test-btn {
+    margin-top: 30px;
+}
+
+.cancel-test-btn {
+    margin-left: 15px;
 }

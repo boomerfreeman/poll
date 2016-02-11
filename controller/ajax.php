@@ -9,11 +9,11 @@ class Ajax extends Controller
     {
         parent::__construct();
         
-        if (isset($_POST['poll'])) {
+        if (isset($_POST['test'])) {
             
-            $poll = htmlspecialchars($_POST['poll']);
+            $test = htmlspecialchars($_POST['test']);
             
-            echo json_encode($this->model->getPollData($poll));
+            echo json_encode($this->model->getTestData($test));
         }
     }
 }

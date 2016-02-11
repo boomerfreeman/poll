@@ -63,30 +63,30 @@ class Model
     }
     
     /**
-     * Show all polls
+     * Show all tests
      * @return object
      */
-    public function showPolls()
+    public function showTests()
     {
-        $query = $this->db->query('SELECT `question_id`, `question` FROM `poll` ORDER BY `id`');
+        $query = $this->db->query('SELECT `question_id`, `question` FROM `test` ORDER BY `question_id`');
         
         return $query->fetchAll();
     }
     
-    public function showActivePolls()
+    public function showActiveTests()
     {
-        $query = $this->db->query('SELECT `question_id`, `question` FROM `poll` WHERE `show` = 1 ORDER BY `id`');
+        $query = $this->db->query('SELECT `question_id`, `question` FROM `test` WHERE `show` = 1 ORDER BY `question_id`');
         
         return $query->fetchAll();
     }
     
     /**
-     * Make poll visible for user
+     * Make test visible for user
      * @param type $id
      */
-    public function activatePollInDB($id)
+    public function activateTestInDB($id)
     {
-        $query = $this->db->prepare('UPDATE `poll` SET `show` = 1, `mdate` = :mdate WHERE `question_id` = :id');
+        $query = $this->db->prepare('UPDATE `test` SET `show` = 1, `mdate` = :mdate WHERE `question_id` = :id');
         
         $query->execute(array(
             ':mdate' => date("Y-m-d H:i:s"),
@@ -95,12 +95,12 @@ class Model
     }
     
     /**
-     * Make poll hidden for user
+     * Make test hidden for user
      * @param type $id
      */
-    public function disablePollInDB($id)
+    public function disableTestInDB($id)
     {
-        $query = $this->db->prepare('UPDATE `poll` SET `show` = 0, `mdate` = :mdate WHERE `question_id` = :id');
+        $query = $this->db->prepare('UPDATE `test` SET `show` = 0, `mdate` = :mdate WHERE `question_id` = :id');
         
         $query->execute(array(
             ':mdate' => date("Y-m-d H:i:s"),
@@ -108,37 +108,37 @@ class Model
         ));
     }
     
-    public function editPollInDB($id, $question, $answer, $correct)
+    public function editTestInDB($id, $question, $answers, $correct)
     {
-        $this->deletePollFromDB($id);
-        $this->addPollToDB($question, $answer, $correct, $id);
+        $this->deleteTestFromDB($id);
+        $this->addTestToDB($question, $answers, $correct, $id);
     }
     
     /**
-     * Add new poll to the database
+     * Add new test to the database
      * @param type $question
-     * @param type $answer
+     * @param type $answers
      * @param type $correct
      */
-    public function addPollToDB($question, $answer, $correct, $question_id = null)
+    public function addTestToDB($question, $answers, $correct, $question_id = null)
     {
         if ($question_id == null) {
             $question_id = $this->getLastQuestionID() + 1;
         }
         
-        $rows = count($answer);
+        $rows = count($answers);
         $date = date("Y-m-d H:i:s");
         
         for ($i=0; $i < $rows; $i++) {
             
-            $insert = "INSERT INTO `poll` (`question_id`, `question`, `answer`, `correct`, `show`, `cdate`, `mdate`) VALUES (:question_id, :question, :answer, :correct, :show, :cdate, :mdate)";
+            $insert = "INSERT INTO `test` (`question_id`, `question`, `answer`, `correct`, `show`, `cdate`, `mdate`) VALUES (:question_id, :question, :answer, :correct, :show, :cdate, :mdate)";
             
             $query = $this->db->prepare($insert);
             
             $query->execute(array(
                 ':question_id' => $question_id,
                 ':question' => $question,
-                ':answer' => $answer[$i],
+                ':answer' => $answers[$i],
                 ':correct' => $correct[$i],
                 ':show' => 1,
                 ':cdate' => $date,
@@ -148,35 +148,77 @@ class Model
     }
     
     /**
-     * Delete poll from the database
+     * Delete test from the database
      * @param type $id
      */
-    public function deletePollFromDB($id)
+    public function deleteTestFromDB($id)
     {
-        $query = $this->db->prepare('DELETE FROM `poll` WHERE `question_id` = :id');
+        $query = $this->db->prepare('DELETE FROM `test` WHERE `question_id` = :id');
         $query->execute(array(':id' => $id));
     }
     
     /**
-     * Fetch poll data with certain ID
+     * Fetch test data with certain ID
      * @param type $id
      * @return object
      */
-    public function getPollData($id)
+    public function getTestData($id)
     {
-        $query = $this->db->prepare('SELECT `question_id`, `question`, `answer`, `correct`, `show` FROM `poll` WHERE `question_id` = :id');
+        $query = $this->db->prepare('SELECT `question_id`, `question`, `answer`, `correct`, `show` FROM `test` WHERE `question_id` = :id');
         $query->execute(array(':id' => $id));
         
         return $query->fetchAll();
     }
     
     /**
-     * Get last poll ID from the database
+     * Control user selected asnwers
+     * @param type $id
+     * @param type $answers
+     * @return boolean
+     */
+    public function controlTestAnswer($id, $answers)
+    {
+        $query = $this->db->prepare('SELECT `answer` FROM `test` WHERE `question_id` = :id AND `correct` = 1');
+        $query->execute(array(':id' => $id));
+        
+        $result = $query->fetchAll();
+        
+        $user_answers = count($answers);
+        $db_answers = count($query->rowCount());
+        
+        if ($db_answers > 0) {
+            
+            if ($user_answers != $db_answers) {
+                return false;
+            } else {
+
+                $i = 0;
+                $true = 0;
+
+                foreach ($result as $row => $link) {
+
+                    if ($answers[$i] == $link->answer) {
+                        $true++;
+                        $i++;
+                    }
+                }
+
+                if ($true != $db_answers) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Get last test ID from the database
      * @return int
      */
     private function getLastQuestionID()
     {
-        $query = $this->db->query('SELECT MAX(`question_id`) as `id` FROM `poll`')->fetch();
+        $query = $this->db->query('SELECT MAX(`question_id`) as `id` FROM `test`')->fetch();
         
         return (int) $query->id;
     }
