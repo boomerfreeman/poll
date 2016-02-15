@@ -30,12 +30,12 @@ class Login extends Controller
                 } else {
                     header('Location: ' . URL_PROTOCOL . URL_DOMAIN . '/choice/');
                 }
-                
             } else {
-                $this->showMessage('Incorrect username or password');
+                $test['message'] = 'Incorrect username or password';
             }
         } else {
-            $this->generateView('login');
+            $test['message'] = '';
         }
+        $this->generateView('login', $test);
     }
 }

@@ -85,6 +85,10 @@ class Controller
         require_once '/view/footer.php';
     }
     
+    /**
+     * Control if user logged or not
+     * @return boolean
+     */
     public function checkLoginStatus()
     {
         if (isset($_SESSION['logged'])) {

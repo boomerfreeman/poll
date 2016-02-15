@@ -7,4 +7,9 @@
             <input id="password" type="password" name="password" required>
             <input type="submit" value="Login">
         </form>
+        <div class="msg">
+            <?php if (isset($params['message'])) {
+                echo $params['message'];
+            } ?>
+        </div>
     </body>
