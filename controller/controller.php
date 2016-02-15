@@ -85,12 +85,21 @@ class Controller
         require_once '/view/footer.php';
     }
     
+    public function checkLoginStatus()
+    {
+        if (isset($_SESSION['logged'])) {
+            return true;
+        } else {
+            header('Location: ' . URL_PROTOCOL . URL_DOMAIN);
+            exit;
+        }
+    }
+    
     /**
      * Logout from administration panel
      */
     public function logOut()
     {
-        session_start();
         session_destroy();
         header('Location: ' . URL_PROTOCOL . URL_DOMAIN);
         exit;

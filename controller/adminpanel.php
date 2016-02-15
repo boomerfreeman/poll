@@ -13,6 +13,14 @@ class AdminPanel extends Controller
     {
         parent::__construct();
         
+        session_start();
+        
+        if ($this->checkLoginStatus()) {
+            if ( ! $this->model->checkAdminStatus($_SESSION['username'])) {
+                header('Location: ' . URL_PROTOCOL . URL_DOMAIN . '/choice/');
+            }
+        }
+        
         isset($_POST['logout']) ? $this->logOut() : null;
         
         isset($_POST['test']) ? $this->test = htmlspecialchars($_POST['test']) : null;

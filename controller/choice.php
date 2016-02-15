@@ -17,26 +17,30 @@ class Choice extends Controller
     {
         parent::__construct();
         
-        isset($_POST['logout']) ? $this->logOut() : null;
+        session_start();
         
-        isset($_POST['check']) ? $this->answer = $_POST['check'] : null;
+        if ($this->checkLoginStatus()) {
         
-        if (isset($_POST['answer'])) {
-            
-            $id = htmlspecialchars($_POST['question_id']);
-            $data = $this->controlAnswer($id);
-            
-            if ($data) {
-                $test['message'] = "Correct answer. Well done!";
-            } else {
-                $test['message'] = "No, you are wrong";
+            isset($_POST['logout']) ? $this->logOut() : null;
+
+            isset($_POST['check']) ? $this->answer = $_POST['check'] : null;
+
+            if (isset($_POST['answer'])) {
+
+                $id = htmlspecialchars($_POST['question_id']);
+
+                if ($this->controlAnswer($id)) {
+                    $test['message'] = "Correct answer. Well done!";
+                } else {
+                    $test['message'] = "No, you are wrong";
+                }
             }
+
+            $test['list'] = array_unique($this->model->showActiveTests(), SORT_REGULAR);
+            $test['date'] = date("H:i:s d.m.Y");
+
+            $this->generateView('test', $test);
         }
-        
-        $test['list'] = array_unique($this->model->showActiveTests(), SORT_REGULAR);
-        $test['date'] = date("H:i:s d.m.Y");
-        
-        $this->generateView('test', $test);
     }
     
     private function controlAnswer($id)

@@ -2,7 +2,9 @@
 
 require_once 'controller.php';
 
-// Controller for login page:
+/**
+ *  Controller for login page:
+ */
 class Login extends Controller
 {
     public $username, $password;

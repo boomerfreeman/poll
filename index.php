@@ -21,9 +21,7 @@ class Index extends Controller
             
             } elseif ($this->checkController()) {
                 
-                /**
-                 * Create controller and call method if they have been set in URL
-                 */
+                // Create controller and call method if they have been set in URL
                 $this->checkMethod() ? $this->createController($this->url_controller)->{$this->url_method}() : null;
                 
             } else {

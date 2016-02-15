@@ -245,8 +245,6 @@ class Model
     {
         $query = $this->db->prepare('INSERT INTO `progress` (`user_id`, `question_id`, `user_answer`, `correct`, `cdate`) VALUES (:user_id, :question_id, :user_answer, :correct, :cdate)');
         
-        session_start();
-        
         $user_id = $this->getUserID($_SESSION['username']);
         
         $list = null;
