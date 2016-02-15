@@ -270,10 +270,18 @@ class Model
      */
     private function getLastQuestionID()
     {
-        $query = $this->db->query('SELECT MAX(`question_id`) as `id` FROM `test`')->fetch();
+        $query = $this->db->query('SELECT MAX(`question_id`) as `id` FROM `test`');
         
-        if ($query->rowCount()) {
-            return (int) $query->id;
+        $res = $query->fetch();
+        
+        $rows = $query->rowCount();
+        
+        if ($rows > 0) {
+            $max = $res->id;
+        } else {
+            $max = 0;
         }
+        
+        return $max;
     }
 }
