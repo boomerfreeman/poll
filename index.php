@@ -16,16 +16,14 @@ class Index extends Controller
             $this->splitUrl();
             
             if ( ! $this->url_controller) {
-                
                 $this->url_controller = 'login';
-            
-            } elseif ($this->checkController()) {
-                
-                // Create controller and call method if they have been set in URL
-                $this->checkMethod() ? $this->createController($this->url_controller)->{$this->url_method}() : null;
-                
             } else {
-                $this->url_controller = 'error';
+                if ($this->checkController()) {
+                    // Create controller and call method if they have been set in URL
+                    $this->checkMethod() ? $this->createController($this->url_controller)->{$this->url_method}() : null;
+                } else {
+                    $this->url_controller = 'error';
+                }
             }
         }
         $this->createController($this->url_controller);
@@ -40,7 +38,7 @@ class Index extends Controller
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = explode('/', $url);
 
-        $this->url_controller = isset($url[0]) ? $url[0] : null;
+        $this->url_controller = isset($url[0]) ? $url[0] : 'login';
         $this->url_method = isset($url[1]) ? $url[1] : null;
 
         unset($url[0], $url[1]);
