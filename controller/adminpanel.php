@@ -18,7 +18,7 @@ class AdminPanel extends Controller
         if ($this->checkLoginStatus()) {
             
             if ( ! $this->model->checkAdminStatus($_SESSION['username'])) {
-                header('Location: ' . URL_PROTOCOL . URL_DOMAIN . '/choice/');
+                header('Location: ' . URL . '/choice/');
             }
             
             isset($_POST['logout']) ? $this->logOut() : null;

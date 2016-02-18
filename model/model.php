@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Main model class
+ * Main model
  */
 class Model
 {

@@ -7,6 +7,24 @@ require_once 'controller/controller.php';
  */
 class Index extends Controller
 {
+    /**
+     * The controller
+     * @var null
+     */
+    public $url_controller = null;
+    
+    /**
+     * The method (of the above controller)
+     * @var null
+     */
+    public $url_method = null;
+    
+    /**
+     * URL parameters
+     * @var array
+     */
+    public $url_params = array();
+    
     public function __construct()
     {
         require_once '/config/config.php';
@@ -44,6 +62,32 @@ class Index extends Controller
         unset($url[0], $url[1]);
 
         $this->url_params = array_values($url);
+    }
+    
+    /**
+     * Check controller existence
+     * @return boolean
+     */
+    private function checkController()
+    {
+        if (file_exists('controller/' . $this->url_controller . '.php')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Check method existence
+     * @return boolean
+     */
+    private function checkMethod()
+    {
+        if (method_exists($this->url_controller, $this->url_method)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

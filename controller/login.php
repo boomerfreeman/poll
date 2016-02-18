@@ -26,9 +26,9 @@ class Login extends Controller
                 
                 // Redirect user to administration panel if he has rights, otherwise redirect to tests
                 if ($this->model->checkAdminStatus($this->username)) {
-                    header('Location: ' . URL_PROTOCOL . URL_DOMAIN . '/adminpanel/');
+                    header('Location: ' . URL . '/adminpanel/');
                 } else {
-                    header('Location: ' . URL_PROTOCOL . URL_DOMAIN . '/choice/');
+                    header('Location: ' . URL . '/choice/');
                 }
             } else {
                 $test['message'] = 'Incorrect username or password';

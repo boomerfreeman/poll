@@ -1,28 +1,10 @@
 <?php
 
 /**
- * Main controller class
+ * Main controller
  */
 class Controller
 {
-    /**
-     * The controller
-     * @var null
-     */
-    public $url_controller = null;
-    
-    /**
-     * The method (of the above controller)
-     * @var null
-     */
-    public $url_method = null;
-    
-    /**
-     * URL parameters
-     * @var array
-     */
-    public $url_params = array();
-    
     /**
      * @var null 
      */
@@ -38,28 +20,16 @@ class Controller
     }
     
     /**
-     * Check controller existence
+     * Control if user logged or not
      * @return boolean
      */
-    public function checkController()
+    public function checkLoginStatus()
     {
-        if (file_exists('controller/' . $this->url_controller . '.php')) {
+        if (isset($_SESSION['logged'])) {
             return true;
         } else {
-            return false;
-        }
-    }
-    
-    /**
-     * Check method existence
-     * @return boolean
-     */
-    public function checkMethod()
-    {
-        if (method_exists($this->url_controller, $this->url_method)) {
-            return true;
-        } else {
-            return false;
+            header('Location: ' . URL);
+            exit;
         }
     }
     
@@ -86,26 +56,12 @@ class Controller
     }
     
     /**
-     * Control if user logged or not
-     * @return boolean
-     */
-    public function checkLoginStatus()
-    {
-        if (isset($_SESSION['logged'])) {
-            return true;
-        } else {
-            header('Location: ' . URL_PROTOCOL . URL_DOMAIN);
-            exit;
-        }
-    }
-    
-    /**
      * Logout from administration panel
      */
     public function logOut()
     {
         session_destroy();
-        header('Location: ' . URL_PROTOCOL . URL_DOMAIN);
+        header('Location: ' . URL);
         exit;
     }
 }
