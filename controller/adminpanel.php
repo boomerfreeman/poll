@@ -49,7 +49,7 @@ class AdminPanel extends Controller
             }
             
             $test['date'] = date("H:i:s d.m.Y");
-            $test['list'] = array_unique($this->model->showTests(), SORT_REGULAR);
+            $test['list'] = $this->model->showTests();
             
             $this->generateView('adminpanel', $test);
         }

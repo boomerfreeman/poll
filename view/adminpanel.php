@@ -9,7 +9,7 @@
                 <h2>All tests in the database for <?= $params['date'] ?></h2>
                 <select class="test-list" name="test">
                 <?php foreach ($params['list'] as $test): ?>
-                    <option value="<?= $test->question_id ?>"><?= $test->question ?></option>
+                    <option value="<?= $test->id ?>"><?= $test->question ?></option>
                 <?php endforeach ?>
                 </select>
                 <input class="edit-test-btn" type="button" value="Edit test">

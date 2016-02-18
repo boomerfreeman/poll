@@ -36,7 +36,7 @@ class Choice extends Controller
                 }
             }
 
-            $test['list'] = array_unique($this->model->showActiveTests(), SORT_REGULAR);
+            $test['list'] = array_unique($this->model->showTests(), SORT_REGULAR);
             $test['date'] = date("H:i:s d.m.Y");
 
             $this->generateView('test', $test);
