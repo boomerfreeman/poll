@@ -12,8 +12,6 @@
                     <option value="<?= $test->question_id ?>"><?= $test->question ?></option>
                 <?php endforeach ?>
                 </select>
-                <input type="submit" name="activate" value="Activate test">
-                <input type="submit" name="disable" value="Disable test">
                 <input class="edit-test-btn" type="button" value="Edit test">
                 <input type="submit" name="delete" value="Delete test">
                 <input class="new-test-btn" type="button" value="New test">

@@ -97,34 +97,6 @@ class Model
     }
     
     /**
-     * Make test visible for user
-     * @param type $id
-     */
-    public function activateTestInDB($id)
-    {
-        $query = $this->db->prepare('UPDATE `test` SET `show` = 1, `mdate` = :mdate WHERE `question_id` = :id');
-        
-        $query->execute(array(
-            ':mdate' => date("Y-m-d H:i:s"),
-            ':id' => $id
-        ));
-    }
-    
-    /**
-     * Make test hidden for user
-     * @param type $id
-     */
-    public function disableTestInDB($id)
-    {
-        $query = $this->db->prepare('UPDATE `test` SET `show` = 0, `mdate` = :mdate WHERE `question_id` = :id');
-        
-        $query->execute(array(
-            ':mdate' => date("Y-m-d H:i:s"),
-            ':id' => $id
-        ));
-    }
-    
-    /**
      * Remove and add new test to the database
      * @param type $id
      * @param type $question
