@@ -13,7 +13,7 @@ class Login extends Controller
     {
         parent::__construct();
         
-        if((isset($_POST['username'])) && (isset($_POST['password']))) {
+        if(isset($_POST['username']) && isset($_POST['password'])) {
             
             $this->username = htmlspecialchars($_POST['username']);
             $this->password = htmlspecialchars($_POST['password']);

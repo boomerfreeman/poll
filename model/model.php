@@ -11,7 +11,7 @@ class Model
      */
     public function __construct()
     {
-        require_once '/config/config.php';
+        require_once 'config/config.php';
         
         $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
         $this->db = new PDO(DB_TYPE . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET, DB_USER, DB_PASS, $options);
@@ -68,7 +68,7 @@ class Model
      */
     public function getUserID($username = 'user')
     {
-        $query = $this->db->prepare('SELECT `id` FROM `user` WHERE `username` = :username');
+        $query = $this->db->prepare('SELECT `user_id` FROM `user` WHERE `username` = :username');
         $query->execute(array(':username' => $username));
         
         return $query->fetch()->id;
@@ -80,7 +80,20 @@ class Model
      */
     public function showTests()
     {
-        $query = $this->db->query('SELECT `id`, `question` FROM `test` ORDER BY `id` ASC');
+        $query = $this->db->query('SELECT `test_id`, `test_data` FROM `test` ORDER BY `test_id` ASC');
+        
+        return $query->fetchAll();
+    }
+    
+    /**
+     * Fetch test data with certain ID
+     * @param type $id
+     * @return object
+     */
+    public function getTestData($id)
+    {
+        $query = $this->db->prepare('SELECT `test_id`, `test_data` FROM `test` WHERE `test_id` = :id');
+        $query->execute(array(':id' => $id));
         
         return $query->fetchAll();
     }
@@ -107,15 +120,18 @@ class Model
     public function addTestToDB($question, $answers, $correct)
     {
         $query = $this->db->prepare("
-            INSERT INTO `test` (`question`, `answers`, `correct`, `cdate`) 
-            VALUES (:question, :answers, :correct, :cdate)
+            INSERT INTO `test` (`test_data`) 
+            VALUES (:test_data)
         ");
         
+        $data = array(
+            'question' => $question,
+            'answers' => $answers,
+            'correct' => $correct
+        );
+        
         $query->execute(array(
-            ':question' => $question,
-            ':answers' => serialize($answers),
-            ':correct' => serialize($correct),
-            ':cdate' => date("Y-m-d H:i:s")
+            ':test_data' => serialize($data)
         ));
     }
     
@@ -125,75 +141,62 @@ class Model
      */
     public function deleteTestFromDB($id)
     {
-        $query = $this->db->prepare('DELETE FROM `test` WHERE `id` = :id');
+        $query = $this->db->prepare('DELETE FROM `test` WHERE `test_id` = :id');
         $query->execute(array(':id' => $id));
     }
     
     /**
-     * Fetch test data with certain ID
-     * @param type $id
-     * @return object
-     */
-    public function getTestData($id)
-    {
-        $query = $this->db->prepare('SELECT `id`, `question`, `answers`, `correct` FROM `test` WHERE `id` = :id');
-        $query->execute(array(':id' => $id));
-        
-        return $query->fetchAll();
-    }
-    
-    /**
-     * Control user selected asnwers
-     * @param type $id
+     * Control user asnwers
      * @param type $answers
      * @return boolean
      */
-    public function controlUserAnswer($id, $answers)
+    public function controlUserAnswer($answers)
     {
-        $query = $this->db->prepare('SELECT `answers`, `correct` FROM `test` WHERE `id` = :id');
-        $query->execute(array(':id' => $id));
+        $true = 0;
         
-        $result = $query->fetchAll();
-        
-        $user_answers = count($answers);
-        $db_answers = $query->rowCount();
-        
-        if ($db_answers > 0) {
+        foreach ($answers as $answer) {
             
-            if ($user_answers != $db_answers) {
-                $this->saveUserAnswer($id, $answers, 0);
-                return false;
-            } else {
-                $i = 0;
-                $true = 0;
-                
-                foreach ($result as $row => $link) {
-                    if ($answers[$i] == $link->answer) {
-                        $true++;
-                        $i++;
+            $user_test = explode("_", $answer);
+            $user_test_id = $user_test[0];
+            $user_test_answer = $user_test[1];
+            
+            $result = $this->getTestData($user_test_id);
+
+            if ($result) {
+
+                foreach ($result as $row => $field) {
+
+                    $data = unserialize($field->test_data);
+
+                    for ($i=0; $i < count($data['answers']); $i++) {
+                        
+                        if ($user_test_answer == $data['answers'][$i] && $data['correct'][$i] == '1') {
+                            $true++;
+                        } else {
+                            $true--;
+                        }
                     }
                 }
-                
-                if ($true != $db_answers) {
-                    $this->saveUserAnswer($id, $answers, 0);
-                    return false;
-                } else {
-                    $this->saveUserAnswer($id, $answers, 1);
-                    return true;
-                }
             }
+        }
+        
+        if (count($answers) == $true) {
+            //return true;
+            echo 'Correct';
+        } else {
+            return false;
         }
     }
     
     /**
      * Save right or wrong user answer to the database
-     * @param type $question_id
+     * @param type $test_id
      * @param type $answers
      * @param type $correct
      */
     private function saveUserAnswer($id, $answers, $correct)
     {
-        $query = $this->db->prepare('INSERT INTO `progress` (`user_id`, `question_id`, `user_answer`, `correct`, `cdate`) VALUES (:user_id, :question_id, :user_answer, :correct, :cdate)');
+        $query = $this->db->prepare('INSERT INTO `progress` (`user_id`, `test_id`, `user_answer`, `correct`, `cdate`) VALUES (:user_id, :test_id, :user_answer, :correct, :cdate)');
         
         $user_id = $this->getUserID($_SESSION['username']);
         
@@ -205,12 +208,16 @@ class Model
         
         $answer = substr($list, 0, -2);
         
+        // Fields for db:
+        $data = array(
+            'user_id' => $user_id,
+            'test_id' => $id,
+            'data' => array(),
+            'cdate' => date("Y-m-d H:i:s")
+        );
+        
         $query->execute(array(
-            ':user_id' => $user_id,
-            ':question_id' => $id,
-            ':user_answer' => $answer,
-            ':correct' => $correct,
-            ':cdate' => date("Y-m-d H:i:s")
+            ':test_data' => serialize($data)
         ));
     }
 }

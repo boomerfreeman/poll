@@ -27,8 +27,6 @@ class Index extends Controller
     
     public function __construct()
     {
-        require_once '/config/config.php';
-        
         if (isset($_SERVER['REQUEST_URI'])) {
             
             $this->splitUrl();

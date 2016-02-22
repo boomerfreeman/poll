@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Ajax query controller
+ * Ajax query controller for "Edit test" option in administration panel
  */
 class Ajax extends Controller
 {
@@ -9,11 +9,11 @@ class Ajax extends Controller
     {
         parent::__construct();
         
-        if (isset($_POST['test'])) {
+        if (isset($_POST['test_id'])) {
             
-            $test = htmlspecialchars($_POST['test']);
+            $id = htmlspecialchars($_POST['test_id']);
             
-            echo json_encode($this->model->getTestData($test));
+            echo json_encode($this->model->getTestData($id));
         }
     }
 }

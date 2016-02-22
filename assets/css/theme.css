@@ -13,16 +13,24 @@ h2 {
 }
 
 .settings {
-    float: left;
-    width: 400px;
-    height: 150px;
+    display: block;
     padding: 30px;
     border: 1px solid black;
 }
 
-.tests {
-    float: left;
-    padding-left: 50px;
+.test {
+    width: 100%;
+    display: block;
+    border: 1px solid #000;
+}
+
+.test h2 {
+    padding: 10px;
+    text-align: left;
+}
+
+.test .test-checkbox {
+    margin: 10px;
 }
 
 .new-test-menu {
@@ -61,24 +69,6 @@ h2 {
 }
 
 .cancel-edit-btn {
-    margin-left: 15px;
-}
-
-.start-test-btn {
-    margin-left: 15px;
-}
-
-.answer-test-menu {
-    float: left;
-    width: 800px;
-    padding: 50px;
-}
-
-.answer-test-btn {
-    margin-top: 30px;
-}
-
-.cancel-test-btn {
     margin-left: 15px;
 }
 
