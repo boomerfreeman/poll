@@ -146,9 +146,22 @@ class Model
     }
     
     public function getCorrectAnswers() {
+        
+        $correct_answers = array();
         $tests = $this->showTests();
         
-        
+        foreach ($tests as $row => $field) {
+            
+            $data = unserialize($field->test_data);
+            $answers = count($data['correct']);
+            
+            for ($i=0; $i < $answers; $i++) {
+                if ($data['correct'][$i] == '1') {
+                    $correct_answers[] = $data['answers'][$i];
+                }
+            }
+        }
+        return $correct_answers;
     }
     
     /**

@@ -29,6 +29,7 @@ class Choice extends Controller
                 
                 if ( ! empty ($this->answer)) {
                     $this->controlAnswer() ? $test['message'] = 'Correct answers.' : null;
+                    $this->showAnswers();
                 } else {
                     $test['message'] = 'Click any checkbox, please';
                 }
@@ -46,5 +47,10 @@ class Choice extends Controller
     private function controlAnswer()
     {
         return $this->model->controlUserAnswer($this->answer);
+    }
+    
+    private function showAnswers()
+    {
+        $this->model->getCorrectAnswers();
     }
 }
