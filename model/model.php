@@ -145,6 +145,12 @@ class Model
         $query->execute(array(':id' => $id));
     }
     
+    public function getCorrectAnswers() {
+        $tests = $this->showTests();
+        
+        
+    }
+    
     /**
      * Control user asnwers
      * @param type $answers
@@ -152,37 +158,50 @@ class Model
      */
     public function controlUserAnswer($answers)
     {
+        $corrects = 0;
         $true = 0;
+        $data = array();
+        $user_test_id = array();
+        $user_test_answer = array();
         
         foreach ($answers as $answer) {
-            
             $user_test = explode("_", $answer);
-            $user_test_id = $user_test[0];
-            $user_test_answer = $user_test[1];
+            $user_test_id[] = $user_test[0];
+            $user_test_answer[] = $user_test[1];
+        }
+        
+        foreach ($user_test_id as $i => $k) {
+            $data[$k][] = $user_test_answer[$i];
+        }
+        array_walk($data, create_function('$v', '$v = (count($v) == 1)? array_pop($v): $v;'));
+        
+        foreach ($data as $test_id => $test_answers) {
             
-            $result = $this->getTestData($user_test_id);
+            foreach ($test_answers as $test_answer) {
+                $result = $this->getTestData($test_id);
 
-            if ($result) {
+                if ($result) {
 
-                foreach ($result as $row => $field) {
+                    foreach ($result as $row => $field) {
+                        $data = unserialize($field->test_data);
+                        $answer_num = count($data['answers']);
 
-                    $data = unserialize($field->test_data);
-
-                    for ($i=0; $i < count($data['answers']); $i++) {
-                        
-                        if ($user_test_answer == $data['answers'][$i] && $data['correct'][$i] == '1') {
-                            $true++;
-                        } else {
-                            $true--;
+                        for ($i=0; $i < $answer_num; $i++) {
+                            $data['correct'][$i] == '1' ? $corrects++ : null;
+                            
+                            if ($test_answer == $data['answers'][$i] && $data['correct'][$i] == '1') {
+                                $true++;
+                            }
                         }
                     }
+                } else {
+                    return false;
                 }
             }
         }
         
-        if (count($answers) == $true) {
-            //return true;
-            echo 'Correct';
+        if ($corrects == $true) {
+            return true;
         } else {
             return false;
         }

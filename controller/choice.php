@@ -11,6 +11,7 @@ class Choice extends Controller
      * Array of user answers
      * @var type array
      */
+    private $answer = array();
     
     public function __construct()
     {
@@ -26,20 +27,22 @@ class Choice extends Controller
             
             if (isset($_POST['answer'])) {
                 
-                if (! empty ($this->answer)) {
-                    $res = $this->controlAnswer();
-                    $test['message'] = 'Your answers have been saved.';
+                if ( ! empty ($this->answer)) {
+                    $this->controlAnswer() ? $test['message'] = 'Correct answers.' : null;
                 } else {
                     $test['message'] = 'Click any checkbox, please';
                 }
             }
             
-            $test['list'] = array_unique($this->model->showTests(), SORT_REGULAR);
+            $test['list'] = $this->model->showTests();
             
             $this->generateView('test', $test);
         }
     }
     
+    /**
+     * Process and check user answers
+     */
     private function controlAnswer()
     {
         return $this->model->controlUserAnswer($this->answer);
