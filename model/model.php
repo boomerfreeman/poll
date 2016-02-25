@@ -99,7 +99,7 @@ class Model
     }
     
     /**
-     * Remove and add new test to the database
+     * Edit test data in the database
      * @param type $id
      * @param type $question
      * @param type $answers
@@ -107,8 +107,18 @@ class Model
      */
     public function editTestInDB($id, $question, $answers, $correct)
     {
-        $this->deleteTestFromDB($id);
-        $this->addTestToDB($question, $answers, $correct, $id);
+        $query = $this->db->prepare('UPDATE `test` SET test_data = :test_data WHERE `test_id` = :id');
+        
+        $data = array(
+            'question' => $question,
+            'answers' => $answers,
+            'correct' => $correct
+        );
+        
+        $query->execute(array(
+            ':test_data' => serialize($data),
+            ':id' => $id
+        ));
     }
     
     /**
@@ -119,10 +129,7 @@ class Model
      */
     public function addTestToDB($question, $answers, $correct)
     {
-        $query = $this->db->prepare("
-            INSERT INTO `test` (`test_data`) 
-            VALUES (:test_data)
-        ");
+        $query = $this->db->prepare('INSERT INTO `test` (`test_data`) VALUES (:test_data)');
         
         $data = array(
             'question' => $question,
@@ -145,6 +152,10 @@ class Model
         $query->execute(array(':id' => $id));
     }
     
+    /**
+     * Get correct answers for every test
+     * @return array
+     */
     public function getCorrectAnswers() {
         
         $correct_answers = array();

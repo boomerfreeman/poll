@@ -61,10 +61,7 @@ h2 {
 
 .edit-test-menu {
     width: 550px;
-    text-align: right;
-}
-
-.edit-test-main {
+    margin-top: 20px;
     text-align: right;
 }
 

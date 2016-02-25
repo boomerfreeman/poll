@@ -28,10 +28,10 @@ class Choice extends Controller
             if (isset($_POST['answer'])) {
                 
                 if ( ! empty ($this->answers)) {
-                    $this->controlAnswer();
-                    $test['message'] = 'Correct answers are marked with green';
-                    $test['rights'] = $this->showAnswers();
+                    $this->model->controlUserAnswer($this->answers);
+                    $test['rights'] = $this->model->getCorrectAnswers();
                     $test['checked'] = $_POST['check'];
+                    $test['message'] = 'Correct answers are marked with green';
                 } else {
                     $test['message'] = 'Click any checkbox, please';
                 }
@@ -41,18 +41,5 @@ class Choice extends Controller
             
             $this->generateView('test', $test);
         }
-    }
-    
-    /**
-     * Process and check user answers
-     */
-    private function controlAnswer()
-    {
-        return $this->model->controlUserAnswer($this->answers);
-    }
-    
-    private function showAnswers()
-    {
-        return $this->model->getCorrectAnswers();
     }
 }

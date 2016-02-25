@@ -7,7 +7,7 @@ require_once 'controller.php';
  */
 class AdminPanel extends Controller
 {
-    private $test;
+    private $test_id;
     
     public function __construct()
     {
@@ -23,20 +23,26 @@ class AdminPanel extends Controller
             
             isset($_POST['logout']) ? $this->logOut() : null;
             
-            isset($_POST['test']) ? $this->test = htmlspecialchars($_POST['test']) : null;
+            isset($_POST['test']) ? $this->test_id = htmlspecialchars($_POST['test']) : null;
+            
+            if (isset($_POST['predit'])) {
+                $test['editdata'] = $this->model->getTestData($this->test_id);
+                $test['editmenu'] = true;
+                $test['message'] = 'Please note that all correct answers are dropped!';
+            }
             
             if (isset($_POST['edit'])) {
-                if (( ! empty($_POST['question'])) && ( ! empty($_POST['answer'])) && ( ! empty($_POST['correct']))) {
-                    $this->editTest($_POST['question'], $_POST['answer'], $_POST['correct']);
-                    $test['message'] = "Test $this->test is edited";
+                if ( ! empty($_POST['question']) && ! empty($_POST['answer']) && ! empty($_POST['correct'])) {
+                    $this->model->editTestInDB($this->test_id, htmlspecialchars($_POST['question']), $_POST['answer'], $_POST['correct']);
+                    $test['message'] = "Test $this->test_id is edited";
                 } else {
                     $test['message'] = 'Some fields are empty...';
                 }
             }
             
             if (isset($_POST['add'])) {
-                if (( ! empty($_POST['question'])) && ( ! empty($_POST['answer'])) && ( ! empty($_POST['correct']))) {
-                    $this->addTest($_POST['question'], $_POST['answer'], $_POST['correct']);
+                if ( ! empty($_POST['question']) && ! empty($_POST['answer']) && ! empty($_POST['correct'])) {
+                    $this->model->addTestToDB($_POST['question'], $_POST['answer'], $_POST['correct']);
                     $test['message'] = 'New test is added';
                 } else {
                     $test['message'] = 'Some fields are empty...';
@@ -44,8 +50,8 @@ class AdminPanel extends Controller
             }
             
             if (isset($_POST['delete'])) {
-                $this->deleteTest();
-                $test['message'] = "Test $this->test is deleted";
+                $this->model->deleteTestFromDB($this->test_id);
+                $test['message'] = "Test $this->test_id is deleted";
             }
             
             $test['date'] = date("H:i:s d.m.Y");
@@ -53,20 +59,5 @@ class AdminPanel extends Controller
             
             $this->generateView('adminpanel', $test);
         }
-    }
-    
-    private function editTest($question, $answer, $correct)
-    {
-        $this->model->editTestInDB($this->test, $question, $answer, $correct);
-    }
-    
-    private function addTest($question, $answer, $correct)
-    {
-        $this->model->addTestToDB($question, $answer, $correct);
-    }
-    
-    private function deleteTest()
-    {
-        $this->model->deleteTestFromDB($this->test);
     }
 }
