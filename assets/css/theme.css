@@ -33,6 +33,14 @@ h2 {
     margin: 10px;
 }
 
+.test .correct {
+    text-decoration: underline double green;
+}
+
+.test .wrong {
+    text-decoration: underline red;
+}
+
 .new-test-menu {
     width: 550px;
 }

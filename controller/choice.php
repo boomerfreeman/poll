@@ -11,7 +11,7 @@ class Choice extends Controller
      * Array of user answers
      * @var type array
      */
-    private $answer = array();
+    private $answers = array();
     
     public function __construct()
     {
@@ -23,13 +23,15 @@ class Choice extends Controller
             
             isset($_POST['logout']) ? $this->logOut() : null;
             
-            isset($_POST['check']) ? $this->answer = $_POST['check'] : null;
+            isset($_POST['check']) ? $this->answers = $_POST['check'] : null;
             
             if (isset($_POST['answer'])) {
                 
-                if ( ! empty ($this->answer)) {
-                    $this->controlAnswer() ? $test['message'] = 'Correct answers.' : null;
-                    $this->showAnswers();
+                if ( ! empty ($this->answers)) {
+                    $this->controlAnswer();
+                    $test['message'] = 'Correct answers are marked with green';
+                    $test['rights'] = $this->showAnswers();
+                    $test['checked'] = $_POST['check'];
                 } else {
                     $test['message'] = 'Click any checkbox, please';
                 }
@@ -46,11 +48,11 @@ class Choice extends Controller
      */
     private function controlAnswer()
     {
-        return $this->model->controlUserAnswer($this->answer);
+        return $this->model->controlUserAnswer($this->answers);
     }
     
     private function showAnswers()
     {
-        $this->model->getCorrectAnswers();
+        return $this->model->getCorrectAnswers();
     }
 }
