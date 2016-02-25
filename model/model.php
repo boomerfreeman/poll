@@ -71,7 +71,7 @@ class Model
         $query = $this->db->prepare('SELECT `user_id` FROM `user` WHERE `username` = :username');
         $query->execute(array(':username' => $username));
         
-        return $query->fetch()->id;
+        return $query->fetch()->user_id;
     }
     
     /**
@@ -209,6 +209,7 @@ class Model
                     foreach ($result as $row => $field) {
                         $data = unserialize($field->test_data);
                         $answer_num = count($data['answers']);
+                        $user_test_question[] = $data['question'];
 
                         for ($i=0; $i < $answer_num; $i++) {
                             $data['correct'][$i] == '1' ? $corrects++ : null;
@@ -224,6 +225,8 @@ class Model
             }
         }
         
+        $this->saveUserAnswers($user_test_question, $user_test_answer);
+        
         if ($corrects == $true) {
             return true;
         } else {
@@ -232,34 +235,26 @@ class Model
     }
     
     /**
-     * Save right or wrong user answer to the database
-     * @param type $test_id
+     * Save user answers to the database
+     * @param type $question
      * @param type $answers
-     * @param type $correct
      */
-    private function saveUserAnswer($id, $answers, $correct)
+    private function saveUserAnswers($question, $answers)
     {
-        $query = $this->db->prepare('INSERT INTO `progress` (`user_id`, `test_id`, `user_answer`, `correct`, `cdate`) VALUES (:user_id, :test_id, :user_answer, :correct, :cdate)');
+        $query = $this->db->prepare('INSERT INTO `progress` (`user_id`, `test_data`) VALUES (:user_id, :test_data)');
         
         $user_id = $this->getUserID($_SESSION['username']);
         
-        $list = null;
-        
-        foreach ($answers as $answer) {
-            $list .= $answer . ', ';
-        }
-        
-        $answer = substr($list, 0, -2);
-        
         // Fields for db:
         $data = array(
-            'user_id' => $user_id,
-            'test_id' => $id,
-            'data' => array(),
-            'cdate' => date("Y-m-d H:i:s")
+            'test_data' => array(
+                'question' => $question,
+                'answers' => $answers
+            )
         );
         
         $query->execute(array(
+            ':user_id' => $user_id,
             ':test_data' => serialize($data)
         ));
     }
