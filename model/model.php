@@ -245,7 +245,6 @@ class Model
         
         $user_id = $this->getUserID($_SESSION['username']);
         
-        // Fields for db:
         $data = array(
             'test_data' => array(
                 'question' => $question,

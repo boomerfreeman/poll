@@ -34,11 +34,13 @@ h2 {
 }
 
 .test .correct {
-    text-decoration: underline double green;
+    text-decoration: underline;
+    color: green;
 }
 
 .test .wrong {
-    text-decoration: underline red;
+    text-decoration: underline;
+    color: red;
 }
 
 .new-test-menu {

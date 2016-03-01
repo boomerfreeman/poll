@@ -15,7 +15,7 @@ class Controller
      */
     public function __construct()
     {   
-        require_once '/model/model.php';
+        require_once 'model/model.php';
         $this->model = new Model();
     }
     
@@ -50,9 +50,9 @@ class Controller
      */
     public function generateView($body = 'login', $params = array())
     {
-        require_once '/view/header.php';
-        require_once '/view/' . $body . '.php';
-        require_once '/view/footer.php';
+        require_once 'view/header.php';
+        require_once 'view/' . $body . '.php';
+        require_once 'view/footer.php';
     }
     
     /**
